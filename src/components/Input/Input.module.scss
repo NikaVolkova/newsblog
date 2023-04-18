@@ -1,0 +1,74 @@
+@import "src/assets/colors.scss";
+@import "src/assets/mixins";
+.container{
+    display: contents;
+   gap: 124px;
+   margin-bottom: 20px;
+}
+.title{
+    @include title();
+    width: 35px;
+    height: 20px;
+    left: 1px;
+    top: 0px;
+    padding-top: 56px;
+    font-family: 'Inter';
+    font-style: normal;
+    color: $secondary;
+}
+.input{
+    width:544px;
+    height: 56px;
+    top: 28px;
+    background: $white;
+    box-sizing: border-box;
+    border: 2px solid transparent;
+    &:hover{
+        background: $white;
+        outline: none;
+    border: 2px solid $medium;
+        cursor: pointer;
+        color: $primary;
+     }
+     &::placeholder{
+        padding-left:20px;
+     }
+}
+
+.disabled{
+    left: 2.49%;
+    right: 86.58%;
+    top: 18.4%;
+    bottom: 79.97%;
+    background: $light;
+    border-radius: 2px;
+    cursor: not-allowed;
+    &:hover{
+        cursor: not-allowed;
+        color: $gray;}
+}
+
+.valid{
+    
+    left: 2.49%;
+    right: 86.58%;
+    top: 22.48%;
+    bottom: 75.88%;
+    background: $white;
+    border: 2px solid $error;
+    border-radius: 2px;
+}
+.validText{
+    gap: 16px;
+    left: 2.49%;
+    right: 96.08%;
+    top: 24.58%;
+    bottom: 74.83%;  
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;    
+    color: $error;
+    padding-bottom: 124px;
+}

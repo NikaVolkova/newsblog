@@ -1,18 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {  useSelector  } from "react-redux";
 
-const App=() =>{
+import ThemeProvider from "./components/context/Theme/Provider";
+import { Theme } from "./components/context/Theme/Context";
+import Router from "./pages/Router";
+
+import { useDispatch } from "react-redux/es/exports";
+import { changeTheme, ThemeSelectors } from "./redux/reducers/themeSlice";
+ 
+
+const App=()=> {
+  
+  const dispatch = useDispatch();
+  const theme = useSelector(ThemeSelectors.getThemeValue);
+
+  const onChangeTheme=(value:Theme)=>{
+    dispatch(changeTheme(value));
+  };
+
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-
-      </header>
-    </div>
+ 
+      <ThemeProvider theme={theme} onChangeTheme={onChangeTheme}>
+         <Router/>
+      </ThemeProvider>
   );
 }
 
