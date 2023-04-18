@@ -1,0 +1,50 @@
+@import "/src/assets/colors.scss";
+
+.userSpane{
+    width: 236px;
+    max-height: 84px;
+    padding: 17px 30px 19px 30px;
+    background:$primary;
+    box-sizing: content-box;
+    display: inline-flex;
+    flex-direction: row;    
+    align-items: center;
+    text-align: center;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    width: fit-content;
+    font-size: 16px;
+    line-height: 34px;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    .userInitials{
+        width: 48px;
+        height: 48px;
+        color: $white;
+        background:$primary-secondary;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        &:hover {
+            background-color: $primary-secondary;
+            cursor: pointer;
+            }
+            
+    }
+    .userName{ 
+        width: 104px;
+        height: 48px;
+        color:$white;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-left: 16px;
+        &:hover {
+            background-color: $primary-secondary;
+            cursor: pointer;
+            }
+    }
+}

@@ -1,0 +1,32 @@
+@import "src/assets/colors";
+
+.moduleWraper{
+    position:absolute;
+    z-index:index 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #26222F;
+}
+.moduleFilling{
+    padding-bottom: 54px;
+    background-color: $white;
+}
+.darkFilling{
+    background-color: #64606de1;
+}
+
+.closeIcon{
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    padding:21px 17px 0px 36px;
+    cursor: pointer;
+}
+.infoContainer{
+    order: 1;
+    padding: 82px 77px 54px 73px;
+}
