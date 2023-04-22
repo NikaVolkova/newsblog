@@ -1,0 +1,144 @@
+@import "src/assets/colors.scss";
+.wraper{
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+gap: 32px;
+width: 1120px;
+
+font-family: 'Inter';
+font-style: normal;
+}
+.navigation{
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+    gap:8px;
+    width: 153px;
+    height: 24px;
+    margin-top: 20px;
+    margin-bottom: 32px;
+}
+.anchorНome{
+font-weight: 400;
+font-size: 16px;
+line-height: 24px;
+color:$secondary;
+}
+.darkAnchorНome{
+    background-color: $secondary;
+}
+.pipeline{
+width: 7px;
+height: 24px;
+color: $gray;
+}
+.postText{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: $gray;
+}
+
+.contentFilling{
+display: flex;
+align-items: center;
+justify-content: center;
+flex-direction: column;
+gap: 72px;
+.header{
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 80px;
+    color:$secondary;
+    }
+    .picture{
+        max-width: 992px;
+        max-height: 518px;
+    }
+    .textPost{
+       width: 920px;
+    height: 128px;
+    overflow: hidden;
+     font-weight: 400;
+     font-size: 18px;
+     line-height: 32px;
+     color:$secondary;
+     gap:65px;
+    }
+}
+.icons{
+    max-width: 920px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+.leftIcons{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    padding: 16px 32px;
+    gap: 10px;
+    background: $light;
+    border-radius: 2px;
+  
+    .likeIc{     
+        align-items: center;
+        width: 88px;
+        height: 56px;
+        &:hover{
+            background-color: $primary-secondary;
+            cursor: pointer;
+        }
+    }
+    .disLikeIc{
+        width: 88px;
+        height: 56px;
+        &:hover{
+            background-color: $primary-secondary;
+            cursor: pointer;
+        }
+    }
+    }
+
+    .rightIcons{
+        display: flex;
+        flex-direction: row;
+        align-items:center;
+        text-align: center;
+        justify-content:center;
+        width: 237px;
+        height: 56px;
+        padding: 16px 32px;
+        gap: 10px;
+            background: $light;
+            border-radius: 2px;
+          
+            .saveIc{     
+                align-items: center;
+                width: 88px;
+                height: 56px;
+                &:hover{
+                    background-color: $primary-secondary;
+                    cursor: pointer;
+                }
+            }
+            .addIc{
+                width: 139px;
+                height: 24px;
+                font-size: 18px;
+                line-height: 24px;
+                color: $secondary;
+                
+            }
+            }
+        }
+        .darkTitle {
+            color: $white;
+          }
+          .darkText{
+            color: $white;
+          }  

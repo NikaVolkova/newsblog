@@ -54,10 +54,10 @@ const initialState: InitialType = {
     getAllPosts: (_, __: PayloadAction<GetAllPostsPayload>) => {},
     setAllPosts: (
       state,
-      { payload: { postsCount, cardList } }: PayloadAction<SetAllPostsPayload>
+      action: PayloadAction<CardListType>
     ) => {
-      state.postsList = cardList;
-      state.postsCount = postsCount;
+      state.postsList = action.payload;
+     
     },
     setAllPostsLoading: (state, action: PayloadAction<boolean>) => {
       state.isAllPostsLoading = action.payload;

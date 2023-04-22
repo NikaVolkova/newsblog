@@ -7,7 +7,7 @@ import PagesContainer from "./PagesContainer";
 //import SingInPage from "./SingInPage";
 //import SingUpPage from "./SingUpPage";
 //import SuccessPage from "./SuccessPage";
-//import SinglePost from "./SinglePost";
+import SinglePost from "./SinglePost";
 import Home from "./Home";
 //import RegConfirmation from "./RegConfirmation";
 //import NewPass from "./Newpassword/NewPass";
@@ -45,7 +45,7 @@ const Router = () => {
       <Routes>
         <Route path={RoutesList.Home} element={<PagesContainer />}>
           <Route path={RoutesList.Home} element={<Home />} />
-         
+          <Route path={RoutesList.SinglePost} element={<SinglePost/>} />
           <Route path={RoutesList.Default } element={<div>404 NOT FOUND</div>}/>
 
           <Route path={RoutesList.Search} element={<Search />} />

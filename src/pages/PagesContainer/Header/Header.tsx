@@ -81,7 +81,7 @@ const userInfo = useSelector(AuthSelectors.getUserInfo);
           title={"Blogologo"}
           onClick={onClickMenuButton}
           type={ButtonType.Primary}
-          className={styles.button}
+          className={styles.buttonBlogo}
         />
         {isInputOpened && (
             <Input

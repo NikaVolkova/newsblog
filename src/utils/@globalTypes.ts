@@ -1,8 +1,9 @@
 export type CardType = {
     id: number;
-    image: string;
-    text: string;
-    date: string;
+    imageUrl: string;
+    summary: string;
+    newsSite:string;
+    publishedAt: string;
     lesson_num: number;
     title: string;
     description: string;
