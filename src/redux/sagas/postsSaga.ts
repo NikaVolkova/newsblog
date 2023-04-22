@@ -5,20 +5,20 @@ import { ApiResponse } from "apisauce";
 import { AddPostPayload,GetAllPostsPayload,GetSearchPostsPayload, } from "src/redux/reducers/@types";
 import { addNewPost,getAllPosts, setAllPosts, setAllPostsLoading, getSinglePost,setSinglePost,getMyPosts,setMyPosts,getSearchedPosts,setSearchedPosts} from "../reducers/postSlice";
 import { AllPostsResponse } from "./@types";
-import { CardType } from "../../utils/@globalTypes";
+import { CardListType, CardType } from "../../utils/@globalTypes";
 //import callCheckingAuth from "src/redux/sagas/callCheckingAuth";
 
 function* getAllPostsWorker(action: PayloadAction<GetAllPostsPayload>) {
   yield put(setAllPostsLoading(true));
   const { offset,search, ordering } = action.payload;
-  const { ok, data, problem }: ApiResponse<AllPostsResponse> = yield call(
+  const { ok, data, problem }: ApiResponse<CardListType> = yield call(
     API.getPosts,
     offset,
     search,
     ordering
   );
   if (ok && data) {
-    yield put(setAllPosts({ cardList: data.results, postsCount: data.count }));
+    yield put(setAllPosts(data ));
   } else {
     console.warn("Error getting all posts", problem);
   }
@@ -54,8 +54,8 @@ function* getSearchedPostsWorker(action: PayloadAction<GetSearchPostsPayload>) {
   if (ok && data) {
     yield put(
       setSearchedPosts({
-        cardList: data.results,
-        postsCount: data.count,
+        cardList: data.launches,
+        postsCount: data.id,
         isOverwrite,
       })
     );

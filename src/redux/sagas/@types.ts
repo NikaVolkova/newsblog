@@ -1,10 +1,15 @@
 import { CardListType } from "../../utils/@globalTypes";
 
 export type AllPostsResponse = {
-  count: number;
-  next: string;
-  previous: string;
-  results: CardListType;
+  id: 	number;
+  title:string;
+  url:string;
+  imageUrl:string;
+  summary:string;
+  publishedAt:number;
+  launches:CardListType;
+  events:CardListType;
+ 
 };
 export type SignUpUserResponse = {
   username: string;

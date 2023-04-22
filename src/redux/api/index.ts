@@ -3,17 +3,16 @@ import { ActivateUserData, UserPayloadData, SignInUserData } from "../reducers/@
 import { PER_PAGE } from "src/utils/constants";
 
 const API = create({
-  baseURL: "https://api.spaceflightnewsapi.net/v3/",
+  baseURL: "https://api.spaceflightnewsapi.net",
 });
 
-const getPosts = (offset: number, search?: string, ordering?: string) => {
-  return API.get("/article/v3/articles/", { limit: PER_PAGE, search, offset,ordering });
+const getPosts = ( offset?: number, search?: string, ordering?: string) => {
+  return API.get("/v3/blogs/", ({_limit:PER_PAGE, _start: offset, _sort: ordering}));
 };
 
 const getSinglePost = (id: string) => {
-  return API.get(`/article/v3/articles/${id}/`);
+  return API.get(`/v3/blogs/${id}/`);
 };
-
 
 const signUpUser = (data: UserPayloadData) => {
   return API.post("/auth/users/", data);

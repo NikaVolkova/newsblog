@@ -37,9 +37,6 @@ const TABS_LIST = [
 ];
 
 
-
-
-
 const Home = () => {
  
   const {theme} =useThemeContext();

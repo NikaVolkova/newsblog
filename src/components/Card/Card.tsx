@@ -23,7 +23,7 @@ import {
 
 
 const Card: FC<CardProps> = ({ card, size }) => {
-  const { title, text, date, image, id } = card;
+  const { title, summary, publishedAt, imageUrl, id } = card;
 
   const { theme } = useThemeContext();
   const dispatch = useDispatch();
@@ -71,9 +71,16 @@ const Card: FC<CardProps> = ({ card, size }) => {
           [styles.searchInfoContainer]: isSearch,
         })}
       >
+        <img
+          src={imageUrl}
+          className={classNames(styles.image, {
+            [styles.mediumImage]: isMedium,
+            [styles.smallImage]: isSmall || isSearch,
+          })}
+        />
         <div className={styles.mainInfoContainer}>
           <div className={styles.titleContainer}>
-            <div className={styles.date}>{date}</div>
+            <div className={styles.date}>{publishedAt}</div>
             <div
               className={classNames(styles.title, {
                 [styles.mediumTitle]: isMedium || isSmall || isSearch,
@@ -84,15 +91,9 @@ const Card: FC<CardProps> = ({ card, size }) => {
               {title}
             </div>
           </div>
-          {size === CardSize.Large && <div className={styles.text}>{text}</div>}
+          {size === CardSize.Large && <div className={styles.text}>{summary}</div>}
         </div>
-        <img
-          src={image}
-          className={classNames(styles.image, {
-            [styles.mediumImage]: isMedium,
-            [styles.smallImage]: isSmall || isSearch,
-          })}
-        />
+        
       </div>
       <div className={styles.footer}>
         <div className={classNames(styles.iconContainer, {
