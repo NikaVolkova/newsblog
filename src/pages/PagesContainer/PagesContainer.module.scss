@@ -9,11 +9,11 @@
 }
 .searchContainer {
   overflow: unset;
+  background-color: $gray;
 }
 
 .mainInfo {
   flex: 1;
-
   padding-left: 300px;
   padding-right: 300px;
   margin-top: 156px;
@@ -24,6 +24,12 @@
 
 .darkContainer {
   background-color: $secondary;
+}
+.switcher{
+  display: flex;
+  justify-content: space-between;
+  flex-direction:row;
+  gap: 22px;
 }
 .footer {
   padding: 33px 0;

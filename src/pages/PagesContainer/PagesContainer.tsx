@@ -22,10 +22,9 @@ const PagesContainer = () => {
            <div className={styles.mainInfo}>
         <Outlet />
         <div className={styles.footer}>
-          <div>©2022 Blogolog</div>
-          <div>Dark theme
-          <ThemeSwitcher />
-          </div>
+          <div>©2023 Blogolog</div>
+          <div className={styles.switcher}>Dark Theme<ThemeSwitcher /></div>
+          
         </div>
       </div>
     </div>
