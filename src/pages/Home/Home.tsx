@@ -7,20 +7,25 @@ import { useParams } from "react-router-dom";
 import Title from "../../components/Title";
 import Tabs from "src/components/Tabs";
 import CardsList from "src/components/CardsList";
-import { TabsNames, ButtonType } from "src/utils/@globalTypes";
+import { TabsNames, ButtonType,CardType } from "src/utils/@globalTypes";
 import {Theme, useThemeContext} from "../../components/context/Theme/Context";
-
 import { getAllPosts, PostSelectors } from "src/redux/reducers/postSlice";
 import SelectedPostModal from "./SelectedPostModal";
 import { AuthSelectors } from "src/redux/reducers/authSlice";
 import { PER_PAGE } from "src/utils/constants";
 import Button from "src/components/Button";
 import Loader from "src/components/Loader";
+import { Select } from 'antd';
 
 enum Order {
   Date = "date",
   Title = "title",
+  Day = "publishedAt",
+  Week="week",
+  Month = "month",
+  Year = "year",
 }
+
 
 const TABS_LIST = [
   {
@@ -45,19 +50,19 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [ordering, setOrdering] = useState("");
 
-
-  const onTabClick = (key: TabsNames) => () => {
+  
+ const onTabClick = (key: TabsNames) => () => {
     setActiveTab(key);
     setCurrentPage(1);
   };
   const onFilterButtonClick = (order: Order) => () => {
-    if (order === ordering) {
-      setOrdering("");
-      setCurrentPage(1);} 
+  if (order === ordering) {
+     setOrdering("");
+     setCurrentPage(1);} 
       else {
       setOrdering(order);
-    }
-  };
+   }
+ };
 
   const params = useParams();
   console.log("Id from url", params?.id);
@@ -99,32 +104,32 @@ const Home = () => {
       <Tabs tabsList={TABS_LIST} activeTab={activeTab} onClick={onTabClick}/>
 
       <div className={styles.filterButtons}>
-        <Button  title={"Day"}
-          onClick={onFilterButtonClick(Order.Date)}
+      <Button  title={"Day"}
+          onClick={onFilterButtonClick(Order.Day)}
           type={ButtonType.Secondary}
           className={classNames(styles.filter, {
-            [styles.activeButton]: ordering === Order.Date,
+            [styles.activeButton]: ordering === Order.Day,
           })}
         />
          <Button  title={"Week"}
-          onClick={onFilterButtonClick(Order.Date)}
+          onClick={onFilterButtonClick(Order.Week)}
           type={ButtonType.Secondary}
           className={classNames(styles.filter, {
-            [styles.activeButton]: ordering === Order.Date,
+            [styles.activeButton]: ordering === Order.Week,
           })}
         />
          <Button  title={"Month"}
-          onClick={onFilterButtonClick(Order.Date)}
+          onClick={onFilterButtonClick(Order.Month)}
           type={ButtonType.Secondary}
           className={classNames(styles.filter, {
-            [styles.activeButton]: ordering === Order.Date,
+            [styles.activeButton]: ordering === Order.Month,
           })}
         />
          <Button  title={"Year"}
-          onClick={onFilterButtonClick(Order.Date)}
+          onClick={onFilterButtonClick(Order.Year)}
           type={ButtonType.Secondary}
           className={classNames(styles.filter, {
-            [styles.activeButton]: ordering === Order.Date,
+            [styles.activeButton]: ordering === Order.Year,
           })}
         />
         <Button title={"Title Filter"}

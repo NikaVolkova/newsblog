@@ -73,6 +73,7 @@ gap: 72px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    padding-bottom: 15px;
 
 .leftIcons{
     display: flex;
@@ -84,19 +85,40 @@ gap: 72px;
     gap: 10px;
     background: $light;
     border-radius: 2px;
+    
   
-    .likeIc{     
+    .facebookIc{     
         align-items: center;
         width: 88px;
         height: 56px;
+        box-shadow: 8px 8px 5px grey;
         &:hover{
             background-color: $primary-secondary;
             cursor: pointer;
         }
     }
-    .disLikeIc{
+    .twiterIc{
         width: 88px;
         height: 56px;
+        box-shadow: 8px 8px 5px grey;
+        &:hover{
+            background-color: $primary-secondary;
+            cursor: pointer;
+        }
+    }
+    .moreIcon{
+        width: 88px;
+        height: 56px;
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 8px 8px 5px grey;
+        svg> path{
+            display: flex;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+         }
         &:hover{
             background-color: $primary-secondary;
             cursor: pointer;
@@ -104,41 +126,15 @@ gap: 72px;
     }
     }
 
-    .rightIcons{
-        display: flex;
-        flex-direction: row;
-        align-items:center;
-        text-align: center;
-        justify-content:center;
-        width: 237px;
-        height: 56px;
-        padding: 16px 32px;
-        gap: 10px;
-            background: $light;
-            border-radius: 2px;
-          
-            .saveIc{     
-                align-items: center;
-                width: 88px;
-                height: 56px;
-                &:hover{
-                    background-color: $primary-secondary;
-                    cursor: pointer;
-                }
-            }
-            .addIc{
-                width: 139px;
-                height: 24px;
-                font-size: 18px;
-                line-height: 24px;
-                color: $secondary;
-                
-            }
-            }
+    
+    .darkIconContainer {
+        div > svg > path {
+          fill: $white;
         }
         .darkTitle {
             color: $white;
           }
           .darkText{
             color: $white;
-          }  
+          }
+      }}

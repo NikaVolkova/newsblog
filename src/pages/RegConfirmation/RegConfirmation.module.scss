@@ -1,0 +1,69 @@
+@import "./src/assets/colors";
+
+.containerRegConfirm {
+  background-color: $light;
+}
+.containerDark{
+  background-color: $secondary;
+}
+.backHomeDark{
+  color: $white;
+  margin-left: 40px;
+  color: $white;
+  &:hover{
+    cursor: pointer;
+        color: $primary;
+ }
+}
+.backBtnHome {
+  margin-top: 72px;
+  margin-left: 40px;
+  margin-bottom: 32px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: $secondary;
+  &:hover{
+    cursor: pointer;
+        color: $primary;
+ }
+}
+
+
+.wrapperRegConfirm{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+}
+.emailText {
+  border: 1px solid $medium;
+  padding: 40px;
+  margin-bottom: 40px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: $secondary;
+
+}
+.emailTextDark{
+  border-color: $gray;
+  color: $white;
+
+}
+.titleRegConfirm {
+  margin-left: 40px;
+  text-align: start;
+  margin-bottom: 72px;
+}
+.textComment{
+width: 318px;
+height: 72px;
+}
+.button {
+  text-align: center;
+  margin-top: 48px;
+  width: 544px;
+}
+

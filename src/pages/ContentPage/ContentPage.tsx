@@ -1,19 +1,46 @@
 import React, { FC, useEffect } from "react";
-import { CardType } from "../../utils/@globalTypes";
-import {ContentProps} from "./types";
+import { CardType,CardListType, CardSize } from "../../utils/@globalTypes";
+import { useNavigate } from "react-router-dom";
 import styles from "./ContentPage.module.scss";
 import { Theme, useThemeContext } from "../../components/context/Theme/Context";
-import { BookmarkIcon} from "../../assets/icons/BookmarkIcon";
-import { DislikeIcon } from "../../assets/icons/DislikeIcon";
-import { LikeIcon } from "../../assets/icons/LikeIcon";
+import {MoreIcon} from "../../assets/icons/MoreIcon";
+import {  TwiterIcon } from "../../assets/icons/Twiter";
+import { FacebookIcon } from "../../assets/icons/Facebook";
 import classNames from "classnames";
+import CardsList from "../../components/CardsList";
+import Card from "../../components/Card";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  PostSelectors,
+  setPostVisibility,
+  setSelectedPost,
+ 
+} from "../../redux/reducers/postSlice";
 
 type PostProps = {
   post: CardType;
 };
-const ContentPage: FC<PostProps> = ({post}) => {
+
+const ContentPage: FC<PostProps>= ({post}) => {
+
+  const { theme } = useThemeContext();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const postsList = useSelector(PostSelectors.getAllPosts);
+  const isVisible = useSelector(PostSelectors.getVisibleSelectedModal);
+  const isDark = theme === Theme.Dark;
 const { title,imageUrl,summary, id} = post;
-const { theme } = useThemeContext();
+
+const onClickMore=()=>{
+  dispatch(setSelectedPost(post));
+  dispatch(setPostVisibility(true));
+};
+const getCurrentList = () => {
+      return postsList;
+};
+const onTitleClick = () => {
+  navigate(`/blog/${id}`);
+};
 return(
 <div>
     <div className={styles.wraper}>
@@ -36,6 +63,7 @@ Home
                <div className={classNames(styles.title, {
               [styles.darkTitle]: theme === Theme.Dark,
               })}
+              onClick={onTitleClick}
                >
              {title}
             </div>
@@ -54,23 +82,31 @@ Home
               </div>
             <div className={styles.icons} >
               <div className={styles.leftIcons}>
-                  <div className={styles.likeIc}>
-                <LikeIcon/>
+                  <div className={styles.facebookIc}>
+                  <a href="https://ru-ru.facebook.com/">
+                <FacebookIcon /> 
+                   </a>
                   </div>
-                  <div className={styles.disLikeIc}>
-                <DislikeIcon/>
+                  <div className={styles.twiterIc}>
+                    <a href="https://twitter.com/">
+                < TwiterIcon/>
+                    </a>
                   </div>
+                  <div  className={classNames(styles.moreIcon, {
+            [styles.darkIconContainer]: isDark,
+          })}>
+          {!isVisible && <div  onClick={onClickMore}> <MoreIcon/> </div>}
+        </div>
               </div>
-              <div className={styles.rightIcons}>
-               <div className={styles.saveIc}>
-               <BookmarkIcon /> 
-               </div>
-               <div className={styles.addIc}>
-               Add to favorites
-               </div>
-              </div>
+        
             </div>
+     <div className={styles.footer}>
+    
+      
 
+
+
+      </div>
 
     </div>
 </div>

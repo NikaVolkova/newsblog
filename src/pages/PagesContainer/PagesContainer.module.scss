@@ -14,10 +14,9 @@
 
 .mainInfo {
   flex: 1;
-  padding-left: 300px;
-  padding-right: 300px;
   margin-top: 156px;
   display: flex;
+  align-items: center;
   flex-direction: column;
   justify-content: space-between;
 }
@@ -26,10 +25,13 @@
   background-color: $secondary;
 }
 .switcher{
+  width: 65px;
   display: flex;
-  justify-content: space-between;
+  justify-content:flex-end;
+  align-items: end;
   flex-direction:row;
   gap: 22px;
+  
 }
 .footer {
   padding: 33px 0;
@@ -37,6 +39,8 @@
   justify-content: space-between;
   border-top: 1px solid $gray;
   div {
+    justify-content: space-between;
+    width: 626px;
     color: $gray;
   }
 }

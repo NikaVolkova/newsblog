@@ -4,14 +4,14 @@ import {useDispatch, useSelector } from "react-redux";
 import { AuthSelectors, getUserInfo } from "src/redux/reducers/authSlice";
 import {getMyPosts} from "src/redux/reducers/postSlice";
 import PagesContainer from "./PagesContainer";
-//import SingInPage from "./SingInPage";
-//import SingUpPage from "./SingUpPage";
-//import SuccessPage from "./SuccessPage";
+import SingInPage from "./SingInPage";
+import SingUpPage from "./SingUpPage";
+import SuccessPage from "./SuccessPage";
 import SinglePost from "./SinglePost";
 import Home from "./Home";
-//import RegConfirmation from "./RegConfirmation";
-//import NewPass from "./Newpassword/NewPass";
-//import ResetPass from "./ResetPassword/ResetPass";
+import RegConfirmation from "./RegConfirmation";
+import NewPass from "./Newpassword/NewPass";
+import ResetPass from "./ResetPassword/ResetPass";
 import Search from "src/pages/Search";
 //import AddPost from "src/pages/AddPost";
 
@@ -47,7 +47,12 @@ const Router = () => {
           <Route path={RoutesList.Home} element={<Home />} />
           <Route path={RoutesList.SinglePost} element={<SinglePost/>} />
           <Route path={RoutesList.Default } element={<div>404 NOT FOUND</div>}/>
-
+          <Route path={RoutesList.SignIn} element={<SingInPage />} />
+          <Route path={RoutesList.SignUp} element={<SingUpPage />} />
+          <Route path={RoutesList.Success} element={<SuccessPage />} />
+          <Route path={RoutesList.Confirm } element={<RegConfirmation/>} />
+          <Route path={RoutesList.NewPass} element={<NewPass />} />
+          <Route path={RoutesList.ResetPass} element={<ResetPass />} />
           <Route path={RoutesList.Search} element={<Search />} />
         </Route>
       </Routes>
