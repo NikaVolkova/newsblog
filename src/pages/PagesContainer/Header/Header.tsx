@@ -78,7 +78,7 @@ const userInfo = useSelector(AuthSelectors.getUserInfo);
       <div className={styles.container}>
       <div className={styles.infoContainer}>
         <Button
-          title={"Blogologo"}
+          title=""
           onClick={onClickMenuButton}
           type={ButtonType.Primary}
           className={styles.buttonBlogo}

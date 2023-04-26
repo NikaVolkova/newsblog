@@ -7,7 +7,7 @@ const API = create({
 });
 
 const getPosts = ( offset?: number, search?: string, ordering?: string) => {
-  return API.get("/v3/blogs/", ({_limit:PER_PAGE, _start: offset, _sort: ordering}));
+  return API.get("/v3/blogs/", ({_limit:PER_PAGE, _start: offset, _contains: search, _sort: ordering}));
 };
 
 const getSinglePost = (id: string) => {

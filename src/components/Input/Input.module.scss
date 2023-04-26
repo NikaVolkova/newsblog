@@ -17,10 +17,11 @@
     color: $secondary;
 }
 .input{
-    width:544px;
+    margin-left:15px;
+    width:1036px;
     height: 56px;
     top: 28px;
-    background: $white;
+    background: $gray;
     box-sizing: border-box;
     border: 2px solid transparent;
     &:hover{

@@ -1,3 +1,13 @@
 export const ACCESS_TOKEN_KEY = "accessTokenFE39";
 export const REFRESH_TOKEN_KEY = "refreshTokenFE39";
 export const PER_PAGE = 12;
+export const ARTICLES_COUNT = "articles/count";
+export const ARTICLES = "articles?_limit=12";
+export const ARTICLES_ID = "articles/{id}";
+export const BLOGS_COUNT = "blogs/count";
+export const BLOGS = "blogs?_limit=12";
+export const BLOGS_ID = "blogs/{id}";
+export const ARTICLES_LIMIT = "articles?_limit=12";
+export const BLOGS_LIMIT = "blogs?_limit=12";
+export const ARTICLES_SORT = "articles?_sort=publishedAt&_limit=12";
+export const BLOGS_SORT = "blogs?_sort=publishedAt&_limit=12";

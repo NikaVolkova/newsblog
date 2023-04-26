@@ -1,20 +1,15 @@
 @import "src/assets/colors";
 .container {
   display: flex;
-  border-bottom: 1px solid $light;
-  border-top: 1px solid $light;
-  background-color: $white;
 }
 .button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 118px;
-  height: 80px;
+  width: 38px;
+  height: 16px;
   box-sizing: border-box;
-  &:first-child {
-    border-right: 1px solid $light;
-  }
+
   &:hover {
     cursor: pointer;
     svg > path {

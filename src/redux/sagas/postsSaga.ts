@@ -6,7 +6,7 @@ import { AddPostPayload,GetAllPostsPayload,GetSearchPostsPayload, } from "src/re
 import { addNewPost,getAllPosts, setAllPosts, setAllPostsLoading, getSinglePost,setSinglePost,getMyPosts,setMyPosts,getSearchedPosts,setSearchedPosts} from "../reducers/postSlice";
 import { AllPostsResponse } from "./@types";
 import { CardListType, CardType } from "../../utils/@globalTypes";
-//import callCheckingAuth from "src/redux/sagas/callCheckingAuth";
+import callCheckingAuth from "src/redux/sagas/callCheckingAuth";
 
 function* getAllPostsWorker(action: PayloadAction<GetAllPostsPayload>) {
   yield put(setAllPostsLoading(true));

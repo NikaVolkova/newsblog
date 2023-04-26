@@ -12,8 +12,8 @@
     background: #26222F;
 }
 .moduleFilling{
-    padding-bottom: 54px;
-    background-color: $white;
+    padding: 54px;
+    background-color: $gray;
 }
 .darkFilling{
     background-color: #64606de1;
@@ -29,4 +29,5 @@
 .infoContainer{
     order: 1;
     padding: 82px 77px 54px 73px;
+    background-color: $white;
 }

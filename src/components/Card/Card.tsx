@@ -38,7 +38,7 @@ const Card: FC<CardProps> = ({ card, size }) => {
   const onStatusClick = (status: LikeStatus) => () => {
     dispatch(setStatus({ status, card }));
   };
-  const onClickMore=()=>{
+   const onClickMore=()=>{
     dispatch(setSelectedPost(card));
     dispatch(setPostVisibility(true));
   };
@@ -54,7 +54,8 @@ const Card: FC<CardProps> = ({ card, size }) => {
   const addPostIndex = addPost.findIndex((post) => post.id === card.id);
   const likedIndex = likedPosts.findIndex((post) => post.id === card.id);
   const dislikedIndex = dislikedPosts.findIndex((post) => post.id === card.id);
-
+  const date = new Date(publishedAt);
+  const formattedDate = date.toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' });
   return (
     <div
       className={classNames(styles.container, {
@@ -64,6 +65,13 @@ const Card: FC<CardProps> = ({ card, size }) => {
         [styles.searchContainer]: isSearch,
       })}
     >
+     <img
+          src={imageUrl}
+          className={classNames(styles.image, {
+            [styles.mediumImage]: isMedium,
+            [styles.smallImage]: isSmall || isSearch,
+          })}
+        />
       <div
         className={classNames(styles.infoContainer, {
           [styles.mediumInfoContainer]: isMedium,
@@ -71,16 +79,10 @@ const Card: FC<CardProps> = ({ card, size }) => {
           [styles.searchInfoContainer]: isSearch,
         })}
       >
-        <img
-          src={imageUrl}
-          className={classNames(styles.image, {
-            [styles.mediumImage]: isMedium,
-            [styles.smallImage]: isSmall || isSearch,
-          })}
-        />
         <div className={styles.mainInfoContainer}>
+        
           <div className={styles.titleContainer}>
-            <div className={styles.date}>{publishedAt}</div>
+            <div className={styles.date}>{formattedDate}</div>
             <div
               className={classNames(styles.title, {
                 [styles.mediumTitle]: isMedium || isSmall || isSearch,
