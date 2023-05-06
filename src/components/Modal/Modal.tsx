@@ -1,35 +1,46 @@
-import React,{FC,ReactNode} from "react";
+import React,{FC} from "react";
 import styles from "./Modal.module.scss";
-import { CardType } from "../../utils/@globalTypes";
+import { ModalWindowPropsType } from "./types";
+import { CardPostType} from "../../utils/@globalTypes";
 import { CloseIconModal } from "../../assets/icons/CloseIconModal";
 import { Theme, useThemeContext } from "../../components/context/Theme/Context";
-import classNames from "classnames";
+import classnames from "classnames";
 
 
-type ModalProps={
-    isVisible:boolean;
-     onClose:()=>void;
-      children:ReactNode;
-}
 
-const Modal:FC<ModalProps>= ({isVisible, onClose, children})=>{
+
+const Modal: FC<ModalWindowPropsType> = ({
+  isVisible,
+    closeModal,
+    children,
+  }) => {
     const { theme } = useThemeContext();
-    return isVisible? (
-       <div className={styles.moduleWraper}>
-            <div 
-            className={classNames (styles.moduleFilling, {
-                [styles.darkFilling]: theme === Theme.Dark,
-                })}
-            >
-                <div className={styles.closeIcon} onClick={onClose}>
+    const isDarkTheme = theme === Theme.Dark;
+  
+    return (
+      <div
+        className={classnames(styles.modal, {
+          [styles.modalActive]: isVisible,
+          [styles.modal_Dark]: isDarkTheme,
+        })}
+        onClick={closeModal}
+      >
+        <div className={styles.closeIcon} onClick={closeModal}>
                     <CloseIconModal/>
                 </div>
-                <div className={styles.infoContainer}>
-                   {children}
-                </div>
-            </div>
+        <div
+          className={classnames(styles.modal_content, {
+            [styles.modalActive_content]: isVisible,
+            [styles.modalActive_content_Dark]: isDarkTheme,
+          })}
+          onClick={(event) => event.stopPropagation()}
+        >
+          
+          {children}
         </div>
-    ):null;
-};
+      </div>
+    );
+  };
+  
 
 export default Modal;

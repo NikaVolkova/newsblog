@@ -25,19 +25,25 @@ export type GetAllPostsPayload = {
   ordering?: string;
 };
 
-export interface SetAllPostsPayload {
-  cardList: CardListType;
+export interface SetPostsListPayload {
+  CardPostType: CardListType;
   postsCount: number;
-};
-export type GetSearchPostsPayload = {
-  searchValue: string;
-  isOverwrite: boolean;
-  offset: number;
+  cardsList: CardListType;
 };
 
-export interface SetSearchedPostsPayload extends SetAllPostsPayload {
+
+
+export type SearchPostsPayload = {
+  title_contains: string;
+  _start: number;
   isOverwrite: boolean;
-}
+};
+
+export type SetSearchedPostsPayload = {
+  data: CardListType;
+  isOverwrite: boolean;
+};
+
   export type SignUpUserPayload = PayloadWithCallback<UserPayloadData>;
   export type ActivateUserPayload = PayloadWithCallback<ActivateUserData>;
   export type SignInUserPayload = PayloadWithCallback<SignInUserData>;

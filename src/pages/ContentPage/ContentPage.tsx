@@ -1,115 +1,62 @@
 import React, { FC, useEffect } from "react";
-import { CardType,CardListType, CardSize } from "../../utils/@globalTypes";
+
+import { CardPostType,CardListType } from "../../utils/@globalTypes";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styles from "./ContentPage.module.scss";
+import { getSingleBlogPost,  getSinglePost} from "src/redux/reducers/postSlice";
 import { Theme, useThemeContext } from "../../components/context/Theme/Context";
 import {MoreIcon} from "../../assets/icons/MoreIcon";
 import {  TwiterIcon } from "../../assets/icons/Twiter";
 import { FacebookIcon } from "../../assets/icons/Facebook";
+import Loader from "src/components/Loader/Loader";
 import classNames from "classnames";
-import CardsList from "../../components/CardsList";
-import Card from "../../components/Card";
+import RecomendPostsList from "../../components/RecomendedPostsList";
+import SinglePostList from "src/components/SinglePost";
+import {TabsNames} from "src/utils";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  PostSelectors,
-  setPostVisibility,
-  setSelectedPost,
- 
-} from "../../redux/reducers/postSlice";
+import Selectors from "src/redux/Selectors";
 
-type PostProps = {
-  post: CardType;
-};
-
-const ContentPage: FC<PostProps>= ({post}) => {
-
+const ContentPage= () => {
   const { theme } = useThemeContext();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const postsList = useSelector(PostSelectors.getAllPosts);
-  const isVisible = useSelector(PostSelectors.getVisibleSelectedModal);
+  const params = useParams();
+  const post = useSelector(Selectors.getSinglePost);
+  const isLoading = useSelector(Selectors.getSinglePostLoading);
+  const activeTab = useSelector(Selectors.getActiveTab);
+  const postsList = useSelector(Selectors.getSinglePost);
+  const cardsList = useSelector(Selectors.getCardsList);
+  const isVisible = useSelector(Selectors.getIsModalImgVisible);
   const isDark = theme === Theme.Dark;
-const { title,imageUrl,summary, id} = post;
+  const { id } = params;
 
-const onClickMore=()=>{
-  dispatch(setSelectedPost(post));
-  dispatch(setPostVisibility(true));
-};
+
 const getCurrentList = () => {
       return postsList;
 };
 const onTitleClick = () => {
   navigate(`/blog/${id}`);
 };
-return(
-<div>
-    <div className={styles.wraper}>
-        <div className={styles.navigation}>
-         <div className={styles.anchorНome}>
-         <div
-className={classNames (styles.anchorНome, {
-[styles.darkAnchorНome]: theme === Theme.Dark,
-})}
->
-Home
-</div>
+useEffect(() => {
+  if (id) {
+    dispatch(
+      activeTab === TabsNames.News ? getSingleBlogPost(id) : getSinglePost(id)
+    );
+  }
+}, [id]);
 
-         </div>
-         <div className={styles.pipeline}>|</div>
-         <div className={styles.postText}>Post {id}</div>
-        </div>
-              <div className={styles.contentFilling}>
-               <div className={styles.header}>
-               <div className={classNames(styles.title, {
-              [styles.darkTitle]: theme === Theme.Dark,
-              })}
-              onClick={onTitleClick}
-               >
-             {title}
-            </div>
-
-                </div>
-               <img src={imageUrl} className={styles.picture}></img>
-               <div className={styles.textPost}>
-               <div className={classNames(styles.textPost, {
-              [styles.darkText]: theme === Theme.Dark,
-              })}
-              >
-            {summary}
-             </div>
-
-                </div>
-              </div>
-            <div className={styles.icons} >
-              <div className={styles.leftIcons}>
-                  <div className={styles.facebookIc}>
-                  <a href="https://ru-ru.facebook.com/">
-                <FacebookIcon /> 
-                   </a>
-                  </div>
-                  <div className={styles.twiterIc}>
-                    <a href="https://twitter.com/">
-                < TwiterIcon/>
-                    </a>
-                  </div>
-                  <div  className={classNames(styles.moreIcon, {
-            [styles.darkIconContainer]: isDark,
-          })}>
-          {!isVisible && <div  onClick={onClickMore}> <MoreIcon/> </div>}
-        </div>
-              </div>
-        
-            </div>
-     <div className={styles.footer}>
-    
-      
-
-
-
-      </div>
-
-    </div>
-</div>
+return !isLoading && post ? (
+  <>
+    <SinglePostList post={post} />
+    <RecomendPostsList cardList={cardsList} />
+  </>
+) : (
+  <div className={styles.lottie_container}>
+    <Loader />
+  </div>
 );
-};
+}
+
+
 export default ContentPage;

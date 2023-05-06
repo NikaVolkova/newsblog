@@ -1,128 +1,79 @@
-import React, { FC, useState } from "react";
-import classNames from "classnames";
-import { Theme, useThemeContext } from "../../components/context/Theme/Context";
-import { CardProps} from "./types";
+import { FC } from "react";
 import styles from "./Card.module.scss";
-import { BookmarkIcon } from "../../assets/icons/BookmarkIcon";
-import { DislikeIcon } from "../../assets/icons/DislikeIcon";
-import { LikeIcon } from "../../assets/icons/LikeIcon";
-import { MoreIcon } from "../../assets/icons/MoreIcon";
-import { AddBookmarkIcon } from "../../assets/icons";
-import { SearchIcon } from "../../assets/icons";
-import { useNavigate } from "react-router-dom";
-import { CardSize } from "../../utils/@globalTypes";
-import { useDispatch, useSelector } from "react-redux";
+
+import classNames from "classnames";
 import {
-  LikeStatus,
-  PostSelectors,
-  setAddPost,
-  setPostVisibility,
+  setPostModalImgVisible,
   setSelectedPost,
-  setStatus,
 } from "../../redux/reducers/postSlice";
+import Selectors from "src/redux/Selectors";
+import { CardPostProps } from "./types";
+import { useNavigate } from "react-router-dom";
+import { Theme, useThemeContext } from "../../components/context/Theme/Context";
+import { useDispatch, useSelector } from "react-redux";
 
-
-const Card: FC<CardProps> = ({ card, size }) => {
-  const { title, summary, publishedAt, imageUrl, id } = card;
-
-  const { theme } = useThemeContext();
-  const dispatch = useDispatch();
+const Card: FC<CardPostProps> = ({ post }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { theme } = useThemeContext();
+  const isDarkTheme = theme === Theme.Dark;
+  const isVisible = useSelector (Selectors. getIsModalImgVisible);
+  const { imageUrl, title, updatedAt, id } = post;
 
-  const isVisible = useSelector(PostSelectors.getVisibleSelectedModal);
-  const isDark = theme === Theme.Dark;
-  const isMedium = size === CardSize.Medium;
-  const isSmall = size === CardSize.Small;
-  const isSearch = size === CardSize.Search;
-  
-  const onStatusClick = (status: LikeStatus) => () => {
-    dispatch(setStatus({ status, card }));
+  function convertDate(updatedAt: string | number | Date) {
+    const data = new Date(updatedAt);
+    return data.toLocaleDateString("en-us", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  }
+  const onNavigateToPost = () => {
+    navigate(`/posts/${id}`);
   };
-   const onClickMore=()=>{
-    dispatch(setSelectedPost(card));
-    dispatch(setPostVisibility(true));
+
+  const onClickMore = () => {
+    dispatch(setSelectedPost(post));
+    dispatch(setPostModalImgVisible(true));
   };
-  const onClickBookmark = () => {
-    dispatch(setAddPost({card}));
-  };
-  const onTitleClick = () => {
-    navigate(`/blog/${id}`);
-  };
-  const likedPosts = useSelector(PostSelectors.getLikedPosts);
-  const dislikedPosts = useSelector(PostSelectors.getDislikedPosts);
-  const addPost = useSelector(PostSelectors.getAddPost);
-  const addPostIndex = addPost.findIndex((post) => post.id === card.id);
-  const likedIndex = likedPosts.findIndex((post) => post.id === card.id);
-  const dislikedIndex = dislikedPosts.findIndex((post) => post.id === card.id);
-  const date = new Date(publishedAt);
-  const formattedDate = date.toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' });
+
   return (
     <div
-      className={classNames(styles.container, {
-        [styles.mediumContainer]: isMedium,
-        [styles.smallContainer]: isSmall,
-        [styles.darkContainer]: isDark,
-        [styles.searchContainer]: isSearch,
+      className={classNames(styles.cardWrap, {
+        [styles.cardWrap_Dark]: isDarkTheme,
       })}
     >
-     <img
+      <div className={styles.cardWrap_imgWrap}>
+        <img
+          className={styles.cardWrap_imgWrap_img}
+          onClick={onClickMore}
           src={imageUrl}
-          className={classNames(styles.image, {
-            [styles.mediumImage]: isMedium,
-            [styles.smallImage]: isSmall || isSearch,
-          })}
+          alt="#"
         />
-      <div
-        className={classNames(styles.infoContainer, {
-          [styles.mediumInfoContainer]: isMedium,
-          [styles.smallInfoContainer]: isSmall,
-          [styles.searchInfoContainer]: isSearch,
-        })}
-      >
-        <div className={styles.mainInfoContainer}>
-        
-          <div className={styles.titleContainer}>
-            <div className={styles.date}>{formattedDate}</div>
-            <div
-              className={classNames(styles.title, {
-                [styles.mediumTitle]: isMedium || isSmall || isSearch,
-                [styles.darkContainer]: isDark,
-              })}
-              onClick={onTitleClick}
-            >
-              {title}
-            </div>
-          </div>
-          {size === CardSize.Large && <div className={styles.text}>{summary}</div>}
-        </div>
-        
       </div>
-      <div className={styles.footer}>
-        <div className={classNames(styles.iconContainer, {
-            [styles.darkIconContainer]: isDark,
-          })}>
-          <div onClick={onStatusClick(LikeStatus.Like)}>
-            <LikeIcon />
-            {likedIndex > -1 && 1}
-          </div>
-          <div onClick={onStatusClick(LikeStatus.Dislike)}>
-            <DislikeIcon />
-            {dislikedIndex > -1 && 1}
-          </div>
+      <div
+        className={classNames(styles.cardWrap_textWrap, {
+          [styles.cardWrap_textWrap_Dark]: isDarkTheme,
+        })}
+        onClick={onNavigateToPost}
+      >
+        <div
+          className={classNames(styles.cardWrap_textWrap_dateText, {
+            [styles.cardWrap_textWrap_dateText_Dark]: isDarkTheme,
+          })}
+        >
+          {convertDate(updatedAt)}
         </div>
-        <div  className={classNames(styles.iconContainer, {
-            [styles.darkIconContainer]: isDark,
-          })}>
-          <div onClick={onClickBookmark} >
-            {addPostIndex > -1 ? <AddBookmarkIcon/>: <BookmarkIcon /> }
-          </div>
-          {!isVisible && <div onClick={onClickMore}>
-            <MoreIcon />
-          </div>}
+        <div
+          className={classNames(styles.cardWrap_textWrap_titleText, {
+            [styles.cardWrap_textWrap_titleText_Dark]: isDarkTheme,
+          })}
+          onClick={onNavigateToPost}
+        >
+          {title.length > 67 ? title.substr(0, 67) + "..." : title}
         </div>
       </div>
     </div>
   );
 };
-
 export default Card;

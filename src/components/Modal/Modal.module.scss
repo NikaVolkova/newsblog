@@ -1,33 +1,50 @@
 @import "src/assets/colors";
 
-.moduleWraper{
-    position:absolute;
-    z-index:index 999;
+.modal {
+    z-index: 1000;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background: #26222F;
-}
-.moduleFilling{
-    padding: 54px;
-    background-color: $gray;
-}
-.darkFilling{
-    background-color: #64606de1;
-}
+    background-color: rgba(128, 0, 128, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: 5s !important;
+  }
+  .modalActive {
+    opacity: 1;
+    pointer-events: all;
+    transition: 5s !important;
+    border-radius: 12px;
+  }
+  .modalActive_content {
+    transform: scale(1);
+    transition: 5s !important;
+    border-radius: 12px;
+    &_Dark {
+      background-color: #912ef2 !important;
+    }
+  }
+  .modal_content {
+    padding: 20px;
+    border-radius: 12px;
+    background-color: #fff;
+        
+    transform: scale(1);
+    transition: 5s all !important;
+  }
 
-.closeIcon{
+  .closeIcon{
     display: flex;
-    justify-content: end;
-    align-items: end;
-    padding:21px 17px 0px 36px;
+    justify-content: start;
+    align-items: start;
+    padding:10px;
     cursor: pointer;
-}
-.infoContainer{
-    order: 1;
-    padding: 82px 77px 54px 73px;
-    background-color: $white;
+    background-color:azure;
+    border-radius:100% 100% 100% 100%; 
 }

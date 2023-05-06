@@ -31,14 +31,15 @@ const Tabs: FC<TabsProps> = ({ tabsList, activeTab, onClick }) => {
 return (
     <div className={classNames(styles.container, {
         [styles.darkContainer]: theme === Theme.Dark })}>
-        {tabsList.map((tab) => {
+        {tabsList.map((tab, disabled,) => {
     return <div 
     key={tab.key} 
     className={classNames(styles.tab,{
         [styles.activeTab]:activeTab===tab.key,
         [styles.disabled]:tab.disabled,
     })}
-        onClick={tab.disabled?undefined: onClick(tab.key)}
+        onClick={tab.disabled?undefined: () =>onClick(tab.key)}
+        
         >{tab.title}</div>;
      })}
     </div>

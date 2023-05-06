@@ -1,21 +1,27 @@
-import React, {useEffect} from "react";
-import ContentPage from "../ContentPage/ContentPage";
-import {useDispatch, useSelector} from "react-redux";
-import {getSinglePost, PostSelectors} from "../../redux/reducers/postSlice";
-import {useParams} from "react-router-dom";
+import React, { FC, useEffect } from "react";
+import { CardPostType,CardListType } from "../../utils/@globalTypes";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-const SinglePost=()=>{
-    const dispatch = useDispatch();
-    const params = useParams();
-    const { id } = params;
-    const singlePost = useSelector(PostSelectors.getSinglePost);
+import { getSingleBlogPost,  getSinglePost} from "src/redux/reducers/postSlice";
+import { Theme, useThemeContext } from "../../components/context/Theme/Context";
+import {MoreIcon} from "../../assets/icons/MoreIcon";
+import {  TwiterIcon } from "../../assets/icons/Twiter";
+import { FacebookIcon } from "../../assets/icons/Facebook";
+import Loader from "src/components/Loader/Loader";
+import classNames from "classnames";
+import RecomendPostsList from "../../components/RecomendedPostsList";
+import SinglePostList from "src/components/SinglePost";
+import {TabsNames} from "src/utils";
+import { useDispatch, useSelector } from "react-redux";
+import Selectors from "src/redux/Selectors";
 
-    useEffect(() => {
-        if (id) {
-            dispatch(getSinglePost(id));
-        }
-    }, []);
+type PostProps = {
+  post: CardPostType;
+};
 
-    return singlePost ? <ContentPage post={singlePost} /> : null
-}
+const SinglePost=()=>{}
+
+
+
 export default SinglePost;
