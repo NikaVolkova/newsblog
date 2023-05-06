@@ -11,3 +11,4 @@ export const ARTICLES_LIMIT = "articles?_limit=12";
 export const BLOGS_LIMIT = "blogs?_limit=12";
 export const ARTICLES_SORT = "articles?_sort=publishedAt&_limit=12";
 export const BLOGS_SORT = "blogs?_sort=publishedAt&_limit=12";
+export const DEFAULT_PAGE_NUMBER = 2;

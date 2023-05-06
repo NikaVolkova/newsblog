@@ -1,142 +1,135 @@
-import React, { useMemo, useState, KeyboardEvent  } from "react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { ButtonType } from "../../../utils/@globalTypes";
-import classNames from "classnames";
+import { FC, useEffect, useState } from "react";
 import styles from "./Header.module.scss";
-import Button from "src/components/Button";
-import Input from "src/components/Input";
-import { UserIcon, SearchIcon, } from "src/assets/icons";
-//import BurgerBtn from "../../../components/BurgerButton/BurgerButton";
-
-import UserName from "src/components/UserName";
-
+import {UserIcon} from "src/assets/icons/UserIcon";
+import classNames from "classnames";
+import Input from "../../../components/Input";
+import Button from "src/components/Button/Button";
+import UserName from "../../../components/UserName";
+import ThemeSwitcher from "src/components/ThemeSwitcher";
+import {ButtonType} from "src/utils/@globalTypes";
+import Selectors from "../../../redux/Selectors";
+import {
+  searchForBlogPosts,
+  searchForPosts,
+} from "../../../redux/reducers/postSlice";
+import { SearchIcon, HeadLogo, IconCancel } from "../../../assets/icons";
+import { Theme, useThemeContext } from "../../../components/context/Theme/Context";
 import { RoutesList } from "../../Router";
-
-
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { TabsNames } from "../../../utils";
+import { HeaderProps } from "./types";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { auth, db } from "src/firebase";
+import { useAuthValue } from "src/components/context/Auth/Context";
 import { AuthSelectors, logoutUser } from "src/redux/reducers/authSlice";
+export type UserPropsType = {
+  username: string;
+};
 
-import { getSearchedPosts } from "src/redux/reducers/postSlice";
-
-
-const Header = () => {
-  const [isOpened, setOpened] = useState(false);
-  const [isInputOpened, setInputOpened] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
+const Header: FC<HeaderProps> = ({ onClick, openInput }) => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const isLoggedIn = useSelector(AuthSelectors.getLoggedIn);
-const userInfo = useSelector(AuthSelectors.getUserInfo);
   const dispatch = useDispatch();
-
-  const onClickMenuButton = () => {
-    setOpened(!isOpened);
+  const { theme } = useThemeContext();
+  const isDarkTheme = theme === Theme.Dark;
+  const activeTab = useSelector(Selectors.getActiveTab);
+  const [value, setValue] = useState<string>("");
+  const isLoggedIn = useSelector(AuthSelectors.getLoggedIn);
+  const userInfo = useSelector(AuthSelectors.getUserInfo);
+ 
+  const onAuthButtonClick = () => {
+    navigate(RoutesList.SignIn);
+  };
+  const onChange = (inputValue: string) => {
+    setValue(inputValue);
   };
 
- const onAuthButtonClick = () => {
-  navigate(RoutesList.SignIn);
- };
+  const cliclToLogo = () => {
+    navigate(RoutesList.Home);
+  };
+  const onSignInClick = () => {
+    navigate(RoutesList.SignIn);
+  };
+  const onLogoutClick = () => {
+    dispatch(logoutUser());
+  };
+  
+  const [user] = useAuthState(auth);
+  const [name, setName] = useState("");
 
-  //const onLogoutClick = () => {
-  //  dispatch(logoutUser());
-  //};
+  const fetchUserName = async () => {
+    try {
+      const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+      const doc = await getDocs(q);
+      const data = doc.docs[0].data();
 
-  const onClickSearchButton = () => {
-    setInputOpened(!isInputOpened);
-    if (isInputOpened) {
-      dispatch(getSearchedPosts({searchValue, isOverwrite: true, offset: 0 }));
-      setSearchValue('');
-      navigate(RoutesList.Search);
+      setName(data.name);
+    } catch (err) {
+      console.error(err);
+      alert("An error occured while fetching user data");
+    }
+  };
+  useEffect(() => {
+    if (!user) return navigate("/");
+    fetchUserName();
+  }, [user]);
+
+  const onClickSearchButton  = () => {
+    if (value.length > 0) {
+      dispatch(
+        activeTab === TabsNames.News
+          ? searchForBlogPosts({
+              title_contains: value,
+              _start: 0,
+              isOverwrite: true,
+            })
+          : searchForPosts({
+              title_contains: value,
+              _start: 0,
+              isOverwrite: true,
+            })
+      );
+      navigate(RoutesList.Search, { state: { searchElement: value } });
+      setValue("");
+      onClick();
     }
   };
 
-  const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      onClickSearchButton();
-    }
-  };
-  const navButtonsList = useMemo(
-    () => [
-      {
-        title: "Home",
-        key: RoutesList.Home,
-      },
-      //...(!isLoggedIn
-       // ?[]
-       // :[
-      //{
-       // title: "Add Post",
-      //  key: RoutesList.AddPost,
-    //  },
-   // ]),
-    ],
-    [isLoggedIn]
-  );
-
+  const screenWidth = window.screen.width;
   return (
     <>
       <div className={styles.container}>
-      <div className={styles.infoContainer}>
-        <Button
-          title=""
-          onClick={onClickMenuButton}
-          type={ButtonType.Primary}
-          className={styles.buttonBlogo}
-        />
-        {isInputOpened && (
+      <div className={styles.infoContainer}
+      
+       onClick={cliclToLogo}>
+        <div className={styles.buttonBlogo}> 
+      <HeadLogo/>
+      </div>
+        {!openInput && (
             <Input
-              value={searchValue}
-              onChange={setSearchValue}
-              onKeyDown={onKeyDown}
-              inputClassName={styles.input}
-              placeholder="Search..."
+            value={value}
+            onChange={onChange}
+            inputClassName={styles.input}
+            placeholder="Search..."
             />
           )}
         </div>
     <div className={styles.infoContainer}>
           <Button
-            title={<SearchIcon />}
+            title=""
             onClick={onClickSearchButton}
             type={ButtonType.Primary}
             className={styles.button}
-          />
-        <div className={styles.button} onClick={onAuthButtonClick}>
+          > <SearchIcon /></Button>
+        <div className={styles.authButton} onClick={onAuthButtonClick}>
           {isLoggedIn && userInfo ? (
-            <UserName userName={userInfo?.username} /> ) : (<UserIcon /> )}
+            <UserName  userName={userInfo?.username} /> ) : (<UserIcon /> )}
         </div>
     </div>  
         
       </div>
-      {isOpened && (
-        <div className={styles.menuContainer}>
-          <div className={styles.actionsContainer}>
-          
-          {isLoggedIn && (
-              <div className={styles.authButton}>
-                {userInfo ? <UserName userName={userInfo?.username} /> : null}
-              </div>
-            )}
-
-            {navButtonsList.map(({ key, title }) => {
-              return (
-                <NavLink
-                  to={key}
-                  key={key}
-                  className={classNames(styles.navButton, {
-                    [styles.activeNavButton]: location.pathname === key,
-                  })}
-                >
-                  {title}
-                </NavLink>
-              );
-            })}
-          </div>
-          <div>
-           
-
-          </div>
-        </div>
-      )}
+      
     </>
   );
 };

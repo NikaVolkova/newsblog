@@ -1,15 +1,11 @@
-export type ContentType={
+export type CardPostType = {
     id: number;
-    image: string;
-    text: string;
-    date: string;
-    lesson_num: number;
+    imageUrl: string | null;
+    summary: string;
     title: string;
-    description: string;
-    author: number;
-    
-    };
-    export type ContentProps={
-        content:ContentType;
-        };
-           
+    text: string;
+  };
+  
+  export type PostProps = {
+    post: CardPostType;
+  };

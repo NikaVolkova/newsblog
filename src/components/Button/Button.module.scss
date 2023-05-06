@@ -5,24 +5,31 @@
 .primaryButton{
  @include button();
 padding: 0;
- color:$white;
+background:$primary;
+ border-radius: 16px;
+ cursor: pointer;
+  border: none;
+  border-radius: 4px;
  &:hover{
-    background-color: $primary-secondary;
+   cursor: pointer;
+   box-shadow: 8px 8px 5px grey;
  }
 } 
 .secondaryButton{
  @include button();
- background-color: $light;
- color:$secondary;
+ background: rgb(212, 188, 212);
+ border-radius: 16px;
+ 
  &:hover{
-    background-color: $medium;
+   cursor: pointer;
+   box-shadow: 8px 8px 5px grey;
  }
 }
 .errorButton{
 @include button();
 color: $error;
 &:hover{
-    background-color: $medium;
+   cursor: pointer;
  }
 }
 .disabledButton{
@@ -33,3 +40,24 @@ color: $error;
         background-color:$light;
      }
 }
+.button_Dark.secondary {
+   background-color:$primary;
+   color: #fff;
+   &:hover {
+      cursor: pointer;
+ }
+   }
+.filterButtons{
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   justify-content: space-between;
+   color:$primary;
+   border-radius: 16px;
+      gap: 15px;
+   &:hover {
+      cursor: pointer;
+      background-color:none;
+ }
+   
+ }

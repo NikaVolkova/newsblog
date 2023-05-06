@@ -1,6 +1,5 @@
 import React, { FC } from "react";
-
-import { CardListType, CardSize } from "src/utils/@globalTypes";
+import { CardListType} from "src/utils/@globalTypes";
 import Card from "src/components/Card";
 import EmptyState from "src/components/EmptyState";
 import styles from "./SearchCardList.module.scss";
@@ -12,14 +11,11 @@ const SearchCardList: FC<SearchCardListProps> = ({ cardsList }) => {
   return cardsList.length > 0 ? (
     <div className={styles.container}>
       {cardsList.map((item, index) => {
-        return <Card key={`searchItem_${item.id}_${index}`} card={item} size={CardSize.Search} />;
+        return <Card key={`searchItem_${item.id}_${index}`} post={item}  />;
       })}
     </div>
   ) : (
-    <EmptyState
-      title="Sorry, there's no posts"
-      description="Try to use another search request"
-    />
+    <EmptyState />
   );
 };
 export default SearchCardList;

@@ -1,6 +1,5 @@
-import { CardSize, CardType } from "../../utils/@globalTypes";
+import {  CardPostType } from "../../utils/@globalTypes";
 
-  export type CardProps = {
-    card: CardType;
-    size: CardSize;
-  };
+export type CardPostProps = {
+  post: CardPostType;
+};

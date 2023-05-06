@@ -1,44 +1,49 @@
 import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import InfiniteScroll from "react-infinite-scroll-component";
-import Title from "src/components/Title";
-import CardsList from "src/components/CardsList";
-import { getSearchedPosts, PostSelectors } from "src/redux/reducers/postSlice";
-import SearchCardList from "src/components/SearchCardList";
-import Loader from "src/components/Loader";
+
+import Paginate from "src/components/Paginate";
+import SearchList from "src/components/SearchList";
+import EmptyState from "src/components/EmptyState";
+import { LocationState } from "./type";
+import Selectors from "src/redux/Selectors";
+
 import { PER_PAGE } from "src/utils/constants";
+import { RoutesList } from "../Router";
 
 const Search = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const searchValue = useSelector(PostSelectors.getSearchValue);
-  const cardList = useSelector(PostSelectors.getSearchedPosts);
-  const postsCount = useSelector(PostSelectors.getSearchedPostsCount);
-
+  const { searchElement } = location.state as LocationState;
+  const searchValue = useSelector(Selectors.getSearchedPosts);
+  const postsCount = useSelector(Selectors.getSearchedPostsCount);
   const [page, setPage] = useState(1);
-
-  useEffect(() => {
-    const offset = (page - 1) * PER_PAGE;
-    dispatch(getSearchedPosts({ searchValue, isOverwrite: false, offset }));
-  }, [page]);
+  const searchedPosts = useSelector(Selectors.getSearchedPosts);
+  const isSearchPostsLoading = useSelector(
+    Selectors.getSearchedPostsLoading
+  );
+  
+   useEffect(() => {
+    
+    if (searchElement.length === 0) {
+      navigate(RoutesList.Home);
+    }
+         
+  }, [searchElement]);
 
   const onNextReached = () => {
     setPage(page + 1);
   };
-
   return (
-    <div>
-      <Title title={searchValue} />
-      <InfiniteScroll
-        next={onNextReached}
-        hasMore={cardList.length < postsCount}
-        loader={<Loader />}
-        dataLength={cardList.length}
-        scrollThreshold={0.8}
-        scrollableTarget="scrollableDiv"
-      >
-        <SearchCardList cardsList={cardList} />
-      </InfiniteScroll>
-    </div>
+    searchedPosts.length > 0 ? ( <div>
+       Search results "{searchElement}"
+
+       <SearchList title="searched" description="" searchedPosts={searchedPosts}/>
+       <Paginate pagesCount={16} ></Paginate>
+      
+    </div>): (
+    <EmptyState />  )
   );
 };
 

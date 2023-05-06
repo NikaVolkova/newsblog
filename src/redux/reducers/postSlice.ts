@@ -1,163 +1,139 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CardListType, CardType } from "src/utils/@globalTypes";
-import { RootState } from "../store";
 import {
-  GetAllPostsPayload,
-  SetAllPostsPayload,
-  AddPostPayload,
-  GetSearchPostsPayload,
+  ButtonSort,
+  CardListType,
+  CardPostType,
+  GetPostsPayload,
+  SearchPostsPayload,
   SetSearchedPostsPayload,
-} from "src/redux/reducers/@types";
+  TabsNames,
+} from "../../utils";
 
-type InitialType={
-  selectedPost: CardType | null;
-  isVisibleSelectedModal: boolean;
-  likedPosts: CardType[];
-  dislikedPosts: CardType[];
-  addPost:CardType[];
-  postsList: CardListType;
-  singlePost: CardType | null;
-  myPosts: CardListType;
-  searchedPosts: CardListType;
-  searchValue: string;
-  postsCount: number;
+
+type PostStateType = {
+  selectedPost: CardPostType | null;
+  cardsList: CardListType | [];
+  isPostsLoading: boolean;
+  singlePost: CardPostType | null;
+  isPostLoading: boolean;
+  cardsCount: number;
+  isSearchPostsLoading: boolean;
   searchedPostsCount: number;
-  isAllPostsLoading: boolean;
+  searchedPosts: CardListType;
+  activeTab: TabsNames;
+  activeBtn: ButtonSort;
+  postModalImgVisible: boolean;
 };
 
-
-export enum LikeStatus {
-  Like = "like",
-  Dislike = "dislike",
-}
-
-const initialState: InitialType = {
-  selectedPost: null,
-  isVisibleSelectedModal: false,
-  likedPosts: [],
-  dislikedPosts: [],
-  addPost:[],
-  postsList: [],
-  singlePost:null,
-  myPosts: [],
-  searchedPosts: [],
-  searchValue: "",
-  postsCount: 0,
+const initialState: PostStateType = {
+  cardsList: [],
+  isPostsLoading: false,
+  singlePost: null,
+  isPostLoading: false,
+  cardsCount: 0,
+  isSearchPostsLoading: false,
   searchedPostsCount: 0,
-  isAllPostsLoading: false,
+  searchedPosts: [],
+  activeTab: TabsNames.Articles,
+  activeBtn: ButtonSort.Day,
+  postModalImgVisible: false,
+  selectedPost: null,
 };
 
- const postSlice = createSlice({
+const postsReducer = createSlice({
   name: "posts",
-  initialState,
+  initialState: initialState,
   reducers: {
-    getAllPosts: (_, __: PayloadAction<GetAllPostsPayload>) => {},
-    setAllPosts: (
-      state,
-      action: PayloadAction<CardListType>
-    ) => {
-      state.postsList = action.payload;
-     
+    getPosts: (state, action: PayloadAction<GetPostsPayload>) => {},
+    getPostsCount: (state, action: PayloadAction<number>) => {},
+    setCardsCount: (state, action: PayloadAction<number>) => {
+      state.cardsCount = action.payload;
     },
-    setAllPostsLoading: (state, action: PayloadAction<boolean>) => {
-      state.isAllPostsLoading = action.payload;
+    setCardsList: (state, action: PayloadAction<CardListType>) => {
+      state.cardsList = action.payload.map((card) => {
+        return {
+          ...card,
+        };
+      });
     },
-    getSinglePost:(_, __: PayloadAction<string>)=>{},
-    setSinglePost:(state, action: PayloadAction<CardType | null>) => {
+    setPostsLoading: (state, action: PayloadAction<boolean>) => {
+      state.isPostsLoading = action.payload;
+    },
+    getBlogPosts: (state, action: PayloadAction<GetPostsPayload>) => {},
+    getBlogPostsCount: (state, action: PayloadAction<number>) => {},
+    getSinglePost: (state, action: PayloadAction<string>) => {},
+    setSinglePost: (state, action: PayloadAction<CardPostType>) => {
       state.singlePost = action.payload;
     },
-    setSelectedPost: (state, action: PayloadAction<CardType | null>) => {
-      state.selectedPost = action.payload;
-    }, 
-    setPostVisibility: (state, action: PayloadAction<boolean>) => {
-      state.isVisibleSelectedModal = action.payload;
+    setSinglePostLoading: (state, action: PayloadAction<boolean>) => {
+      state.isPostLoading = action.payload;
     },
-    setStatus(
-      state,
-      action: PayloadAction<{ status: LikeStatus; card: CardType }>
-    ) {
-      const { status, card } = action.payload;
+    getSingleBlogPost: (state, action: PayloadAction<string>) => {},
 
-      const likedIndex = state.likedPosts.findIndex(
-        (post) => post.id === card.id
-      );
-      const dislikedIndex = state.dislikedPosts.findIndex(
-        (post) => post.id === card.id
-      );
-
-      const isLike = status === LikeStatus.Like;
-
-      const mainKey = isLike ? "likedPosts" : "dislikedPosts";
-      const secondaryKey = isLike ? "dislikedPosts" : "likedPosts";
-      const mainIndex = isLike ? likedIndex : dislikedIndex;
-      const secondaryIndex = isLike ? dislikedIndex : likedIndex;
-
-      if (mainIndex === -1) {
-        state[mainKey].push(card);
-      } else {
-        state[mainKey].splice(mainIndex, 1);
-      }
-
-      if (secondaryIndex > -1) {
-        state[secondaryKey].splice(secondaryIndex, 1);
-      }
-    },
-    setAddPost:(state, action:PayloadAction<{card:CardType}>)=>{
-      const {card} = action.payload;
-      const addPostIndex =state.addPost.findIndex((post)=>post.id===card.id);
-      if(addPostIndex===-1){
-        state.addPost.push(card);
-      } else{
-        state.addPost.splice(addPostIndex,1);
-      }
-    },
-    getMyPosts: (_, __:PayloadAction<undefined>)=>{},
-    setMyPosts: (state, action: PayloadAction<CardListType>) => {
-      state.myPosts = action.payload;
-    },
-    getSearchedPosts: (state, action: PayloadAction<GetSearchPostsPayload>) => {
-      state.searchValue = action.payload.searchValue;
+    searchForPosts: (state, action: PayloadAction<SearchPostsPayload>) => {},
+    setSearchPostsLoading: (state, action: PayloadAction<boolean>) => {
+      state.isSearchPostsLoading = action.payload;
     },
     setSearchedPosts: (
       state,
       action: PayloadAction<SetSearchedPostsPayload>
     ) => {
-      const { isOverwrite, cardList, postsCount } = action.payload;
-      state.searchedPostsCount = postsCount;
+      const { isOverwrite, data } = action.payload;
       if (isOverwrite) {
-        state.searchedPosts = cardList;
+        state.searchedPosts = data;
       } else {
-        state.searchedPosts.push(...cardList);
+        state.searchedPosts.push(...data);
       }
     },
-    addNewPost: (_, __: PayloadAction<AddPostPayload>) => {},
+    setSearchedPostsCount: (state, action: PayloadAction<number>) => {
+      state.searchedPostsCount = action.payload;
+    },
+    setActiveTab: (state, action: PayloadAction<TabsNames>) => {
+      state.activeTab = action.payload;
+    },
+    searchForBlogPosts: (
+      state,
+      action: PayloadAction<SearchPostsPayload>
+    ) => {},
+    getPostsBtn: (state, action: PayloadAction<GetPostsPayload>) => {},
+    setActiveBtn: (state, action: PayloadAction<ButtonSort>) => {
+      state.activeBtn = action.payload;
+    },
+    getPostsBlogBtn: (state, action: PayloadAction<GetPostsPayload>) => {},
+    setSelectedPost: (state, action: PayloadAction<CardPostType | null>) => {
+      state.selectedPost = action.payload;
+    },
+    setPostModalImgVisible: (state, action: PayloadAction<boolean>) => {
+      state.postModalImgVisible = action.payload;
+    },
   },
 });
 
-export const { setStatus, getAllPosts, setAllPosts,getSinglePost,setSinglePost,
-   setSelectedPost,setAddPost, setPostVisibility,getMyPosts,setMyPosts,
-   getSearchedPosts,  setSearchedPosts,addNewPost,setAllPostsLoading } = postSlice.actions;
+export default postsReducer.reducer;
 
+export const {
+  getPosts,
+  setCardsList,
+  setPostsLoading,
+  getSinglePost,
+  setSinglePost,
+  setSinglePostLoading,
+  getPostsCount,
+  setCardsCount,
+  searchForPosts,
+  setSearchPostsLoading,
+  setSearchedPosts,
+  setSearchedPostsCount,
+  setActiveTab,
+  getBlogPosts,
+  getBlogPostsCount,
+  getSingleBlogPost,
+  searchForBlogPosts,
+  getPostsBtn,
+  getPostsBlogBtn,
+  setSelectedPost,
+  setPostModalImgVisible,
+} = postsReducer.actions;
 
-export const postName = postSlice.name;
-
-export default postSlice.reducer;
-
-export const PostSelectors = {
-  getLikedPosts: (state: RootState) => state.posts.likedPosts,
-  getDislikedPosts: (state: RootState) => state.posts.dislikedPosts,
-  getSelectedPost: (state: RootState) => state.posts.selectedPost,
-  getVisibleSelectedModal: (state: RootState) =>
-    state.posts.isVisibleSelectedModal,
-  getAddPost:(state: RootState) => state.posts.addPost,
-  getAllPosts: (state: RootState) => state.posts.postsList,
-  getSinglePost:(state:RootState)=>state.posts.singlePost,
-  getMyPosts: (state:RootState)=>state.posts.myPosts,
-  getSearchedPosts: (state: RootState) => state.posts.searchedPosts,
-  getSearchValue: (state: RootState) => state.posts.searchValue,
-  getAllPostsCount: (state: RootState) => state.posts.postsCount,  
-  getAllPostsLoading: (state: RootState) => state.posts.isAllPostsLoading,
-  getSearchedPostsCount: (state: RootState) => state.posts.searchedPostsCount,
-};
 
 

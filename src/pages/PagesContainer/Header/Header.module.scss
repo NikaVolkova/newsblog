@@ -13,20 +13,27 @@
 }
 .infoContainer {
   display: flex;
+  gap:8px;
 }
 .buttonBlogo{
+  margin-left: 8px;
   height: 56px;
   width: 167px;
- 
+  gap:8px;
   display: flex;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  background-color: $white;
+ background-color: none;
  background-image:url(../../../../public/Blogologo.svg);
+ svg:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
 
 }
 .button {
+ 
   height: 56px;
   width: 56px;
   padding: 0;
@@ -35,7 +42,10 @@
   align-items: center;
   box-sizing: border-box;
   background:  #912EF2 103.13%;
-
+  &:hover {
+    cursor: pointer;
+    box-shadow: 8px 8px 5px grey;
+  }
   svg{
     width: 24px !important;
     }
@@ -63,6 +73,7 @@
   &:hover {
     color: $primary;
     cursor: pointer;
+    box-shadow: 8px 8px 5px grey;
   }
   svg{
     width: 24px !important;

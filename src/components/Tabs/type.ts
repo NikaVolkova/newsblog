@@ -1,17 +1,17 @@
 export enum TabsNames {
-  Articles,
-  News,
+  Articles = "articles",
+    News = "news",
  
   }
   
   export type TabsType = {
     title: string;
-    disabled: boolean;
-    key: number;
+    disabled?: boolean;
+    key: TabsNames;
   };
   
   export type TabsProps = {
     tabsList: TabsType[];
-    onClick: (key: TabsNames) => () => void;
+    onClick: (id: TabsNames) => void;
     activeTab: TabsNames;
   };
