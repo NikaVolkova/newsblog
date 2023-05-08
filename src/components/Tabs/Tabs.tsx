@@ -4,12 +4,12 @@ import styles from './Tabs.module.scss';
 import {TabsNames, TabsProps} from "./type";
 import {Theme, useThemeContext} from "../../components/context/Theme/Context";
 import { useSelector } from "react-redux";
-import { AuthSelectors } from "src/redux/reducers/authSlice";
+
 
 const Tabs: FC<TabsProps> = ({ tabsList, activeTab, onClick }) => {
 
   const {theme} =useThemeContext();
-  const isLoggedIn = useSelector(AuthSelectors.getLoggedIn);
+  
 
   const TABS_LIST = useMemo(
     () => [
@@ -24,7 +24,7 @@ const Tabs: FC<TabsProps> = ({ tabsList, activeTab, onClick }) => {
         key: TabsNames.News,
       },
     ],
-    [isLoggedIn]
+    []
   );
 
   

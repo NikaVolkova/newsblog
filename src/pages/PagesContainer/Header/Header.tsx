@@ -23,7 +23,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { auth, db } from "src/firebase";
 import { useAuthValue } from "src/components/context/Auth/Context";
-import { AuthSelectors, logoutUser } from "src/redux/reducers/authSlice";
+
 export type UserPropsType = {
   username: string;
 };
@@ -31,16 +31,41 @@ export type UserPropsType = {
 const Header: FC<HeaderProps> = ({ onClick, openInput }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { theme } = useThemeContext();
-  const isDarkTheme = theme === Theme.Dark;
   const activeTab = useSelector(Selectors.getActiveTab);
   const [value, setValue] = useState<string>("");
-  const isLoggedIn = useSelector(AuthSelectors.getLoggedIn);
-  const userInfo = useSelector(AuthSelectors.getUserInfo);
+  const { theme } = useThemeContext();
+  const isDarkTheme = theme === Theme.Dark;
+ 
  
   const onAuthButtonClick = () => {
     navigate(RoutesList.SignIn);
   };
+    // @ts-ignore
+    const { currentUser } = useAuthValue();
+     const [user] = useAuthState(auth);
+    const [name, setName] = useState("");
+  
+    const fetchUserName = async () => {
+      try {
+        const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+        const doc = await getDocs(q);
+        const data = doc.docs[0].data();
+  
+        setName(data.name);
+      } catch (err) {
+        console.error(err);
+        alert("An error occured while fetching user data");
+      }
+    };
+    useEffect(() => {
+      if (!user) return navigate("/");
+      fetchUserName();
+    }, [user]);
+
+    const onSignInClick = () => {
+      navigate(RoutesList.SignIn);
+    };
+  
   const onChange = (inputValue: string) => {
     setValue(inputValue);
   };
@@ -48,32 +73,7 @@ const Header: FC<HeaderProps> = ({ onClick, openInput }) => {
   const cliclToLogo = () => {
     navigate(RoutesList.Home);
   };
-  const onSignInClick = () => {
-    navigate(RoutesList.SignIn);
-  };
-  const onLogoutClick = () => {
-    dispatch(logoutUser());
-  };
-  
-  const [user] = useAuthState(auth);
-  const [name, setName] = useState("");
 
-  const fetchUserName = async () => {
-    try {
-      const q = query(collection(db, "users"), where("uid", "==", user?.uid));
-      const doc = await getDocs(q);
-      const data = doc.docs[0].data();
-
-      setName(data.name);
-    } catch (err) {
-      console.error(err);
-      alert("An error occured while fetching user data");
-    }
-  };
-  useEffect(() => {
-    if (!user) return navigate("/");
-    fetchUserName();
-  }, [user]);
 
   const onClickSearchButton  = () => {
     if (value.length > 0) {
@@ -110,7 +110,7 @@ const Header: FC<HeaderProps> = ({ onClick, openInput }) => {
             <Input
             value={value}
             onChange={onChange}
-            inputClassName={styles.input}
+            className={styles.input}
             placeholder="Search..."
             />
           )}
@@ -122,9 +122,12 @@ const Header: FC<HeaderProps> = ({ onClick, openInput }) => {
             type={ButtonType.Primary}
             className={styles.button}
           > <SearchIcon /></Button>
-        <div className={styles.authButton} onClick={onAuthButtonClick}>
-          {isLoggedIn && userInfo ? (
-            <UserName  userName={userInfo?.username} /> ) : (<UserIcon /> )}
+        <div className={styles.userWrap}  onClick={onSignInClick}>
+          <UserName 
+            username={
+              currentUser?.emailVerified ? name || "Sign In" : "Sign In"
+            }
+          />
         </div>
     </div>  
         

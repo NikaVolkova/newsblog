@@ -1,134 +1,226 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { FC,useState, useMemo, useEffect } from "react";
 import styles from './SingInPage.module.scss';
 import Title from "../../components/Title";
 import TextInput from "../../components/Input";
-import classNames from "classnames";
+import classnames from "classnames";
 import Button from "../../components/Button";
 import { ButtonType } from "../../utils/@globalTypes";
 import { Theme, useThemeContext } from "../../components/context/Theme/Context";
 import { NavLink, useNavigate } from "react-router-dom";
 import { RoutesList } from "../Router";
 import { useDispatch } from "react-redux";
-import { signInUser } from "src/redux/reducers/authSlice";
+import {
+  signInWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
+import { auth } from "../../firebase";
+import { useAuthValue } from "src/components/context/Auth/Context";
 
-const SingInPage= () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-
-
-  const onChangeEmail = (value: string) => {
-    setEmail(value)
-  };
-  const onChangePassword = (value: string) => {
-    setPassword(value);
-  };
-
-  const onResetPass = () => {
-    navigate(RoutesList.ResetPass);
-  };
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const { theme } = useThemeContext();
-  const isDark = theme === Theme.Dark;
-
-  const onSignInClick = () => {
-    dispatch(
-      signInUser({
-        data: { email, password },
-        callback: () => navigate(RoutesList.Home),
-      })
+type LabelProps = {
+  title: string;
+};
+const validateEmail = (email: string) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
+};
+const SingInPage= () => {
+  const navigate = useNavigate();
+  const { theme, onChangeTheme } = useThemeContext();
+  const isDarkTheme = theme === Theme.Dark;
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [emailTouched, setEmailTouched] = useState(false);
+
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordTouched, setPasswordTouched] = useState(false);
+  // @ts-ignore
+  const { setTimeActive } = useAuthValue();
+  const [error, setError] = useState("");
+
+  const login = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        // @ts-ignore
+        if (!auth.currentUser.emailVerified) {
+          // @ts-ignore
+          sendEmailVerification(auth.currentUser)
+            .then(() => {
+              setTimeActive(true);
+              navigate("/verify-email");
+            })
+            .catch((err) => alert(err.message));
+        } else {
+          navigate("/");
+        }
+      })
+      .catch((err) => setError(err.message));
   };
 
   useEffect(() => {
-    if (email.length === 0) {
-      setEmailError("Email is required field");
+    if (emailTouched && !validateEmail(email)) {
+      setEmailError("Set correct email");
     } else {
       setEmailError("");
     }
-  }, [email]);
+  }, [emailTouched, email]);
 
   useEffect(() => {
-    if (password.length === 0) {
-      setPasswordError("Password is required field");
+    if (passwordTouched && password.length < 8) {
+      setPasswordError("Enter more than 8 characters");
     } else {
       setPasswordError("");
     }
-  }, [password]);
+  }, [passwordTouched, password]);
 
-  const isValid = useMemo(() => {
-    return emailError.length === 0 && passwordError.length === 0;
-  }, [emailError,passwordError ]);
+  const onBlurEmail = () => {
+    setEmailTouched(true);
+  };
 
-  return (
-    <div >
+  const onBlurPassword = () => {
+    setPasswordTouched(true);
+  };
+
+  const Label: FC<LabelProps> = ({ title }) => {
+    return (
       <div
-        className={classNames(styles.container, {
-          [styles.containerDark]: isDark,
+        className={classnames(styles.label, {
+          [styles.label__Dark]: isDarkTheme,
         })}
       >
-        <div
-          className={classNames(styles.backBtnHome, {
-            [styles.backBtnHomeDark]: isDark,
-          })}
-        >
-          Back to home
-        </div>
-        <div className={classNames(styles.title)}>
-          <Title title={"Sing In"} />
-        </div>
-        <div className={styles.wrapperPage}>
-          <div
-            className={classNames(styles.inputContainer, {
-              [styles.inputContainerDark]: isDark,
+        {title}
+      </div>
+    );
+  };
+
+  return (
+    <div
+      className={classnames(styles.signIn, {
+        [styles.signIn__Dark]: isDarkTheme,
+      })}
+    >
+      <div
+        className={classnames(styles.signIn__container, {
+          [styles.signIn__container__Dark]: isDarkTheme,
+        })}
+      >
+        <div className={styles.titleWrap}>
+          <NavLink
+            to={RoutesList.Home}
+            className={classnames(styles.titleWrap__backToHomeText, {
+              [styles.titleWrap__backToHomeTextDark]: isDarkTheme,
             })}
           >
+            Back to home
+          </NavLink>
+          <Title title={"Sign In"}></Title>
+        </div>
+
+        <form
+          className={classnames(styles.formContainer, {
+            [styles.formContainer__Dark]: isDarkTheme,
+          })}
+          onSubmit={login}
+          name="login_form"
+        >
+          <div className={styles.formContainer__inputContainer}>
+            <Label title={"Email"} />
             <TextInput
               value={email}
-              onChange={onChangeEmail}
-              type={"text"}
-              title="Email"
-              placeholder="Your email"
-              errorText={emailError}
+              onChange={setEmail}
+              placeholder={"Your email"}
+              onBlur={onBlurEmail}
+              error={!!emailError}
+              className={classnames(
+                styles.formContainer__inputContainer__emailInput,
+                {
+                  [styles.formContainer__inputContainer__emailInput__Dark]:
+                    isDarkTheme,
+                }
+              )}
             />
+            {emailTouched && emailError && (
+              <div
+                className={classnames({
+                  [styles.error__Dark]: isDarkTheme,
+                })}
+              >
+                {emailError}
+              </div>
+            )}
+          </div>
+          <div className={styles.formContainer__inputContainer}>
+            <Label title={"Password"} />
             <TextInput
+              type="password"
               value={password}
-              onChange={onChangePassword}
-              type={"password"}
-              title="Password"
-              placeholder="Your password"
-              errorText={passwordError}
+              onChange={setPassword}
+              placeholder={"Your password"}
+              onBlur={onBlurPassword}
+              error={!!passwordError}
+              className={classnames(
+                styles.formContainer__inputContainer__passwordInput,
+                {
+                  [styles.formContainer__inputContainer__passwordInput__Dark]:
+                    isDarkTheme,
+                }
+              )}
             />
-            <div onClick={onResetPass}
-              className={classNames(styles.forgotPassword, {
-                [styles.darkThemeForgotPassword]: isDark,
-              })}
+            {passwordTouched && passwordError && (
+              <div
+                className={classnames({
+                  [styles.error__Dark]: isDarkTheme,
+                })}
+              >
+                {passwordError}
+              </div>
+            )}
+            <div
+              className={classnames(
+                styles.formContainer__inputContainer__forgotPass,
+                {
+                  [styles.formContainer__inputContainer__forgotPass__Dark]:
+                    isDarkTheme,
+                }
+              )}
             >
               Forgot password?
             </div>
-            <div className={styles.button}>
-              <Button
-                title={"Sign In"}
-                disabled={!isValid}
-                onClick={onSignInClick}
-                type={ButtonType.Primary}
-              />
-            </div>
+          </div>
+
+          <div className={styles.buttonAndText}>
+            <Button
+              type={ButtonType.Primary}
+              title={"Sign In"}
+              className={styles.buttonAndText__signUpButton}
+              onClick={login}
+            />
             <div
-              className={classNames(styles.singUp, {
-                [styles.darkSingUp]: isDark,
+              className={classnames(styles.buttonAndText__formFooterText, {
+                [styles.buttonAndText__formFooterText__Dark]: isDarkTheme,
               })}
             >
-              Don’t have an account?{" "} 
-              <NavLink to={RoutesList.SignUp} className={styles.navButton}>
-              Sign Up
-            </NavLink>
+              Don’t have an account?{" "}
+              <NavLink
+                className={classnames(
+                  styles.buttonAndText__formFooterText__SignIn,
+                  {
+                    [styles.buttonAndText__formFooterText__SignIn__Dark]:
+                      isDarkTheme,
+                  }
+                )}
+                to={RoutesList.SignUp}
+              >
+                {" "}
+                Sign Up
+              </NavLink>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

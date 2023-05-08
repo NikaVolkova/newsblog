@@ -41,7 +41,7 @@ const NewPass = () => {
           type={"password"}
           title="Password"
           placeholder="Your password"
-          errorText={passwordError}
+          error={!!passwordError}
         />
         <TextInput
           value={confirmPassword}
@@ -49,7 +49,7 @@ const NewPass = () => {
           type={"password"}
           title="Confirm password"
           placeholder="Confirm your password"
-          errorText={passwordError}
+          error={!!passwordError}
         />
 
       <div className={styles.buttonNewPass}>

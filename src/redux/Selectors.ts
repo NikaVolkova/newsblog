@@ -19,4 +19,5 @@ export default {
     setUser: (state: any) => state.authReducer.user,
     getIsModalImgVisible: (state: RootState) => state.posts.postModalImgVisible,
     getSelectedPost: (state:RootState) => state.posts.selectedPost,
+    getUser: (state: RootState) => state.auth.user,
   };

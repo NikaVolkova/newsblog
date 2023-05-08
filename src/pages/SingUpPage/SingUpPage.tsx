@@ -1,177 +1,313 @@
-import React, { useEffect, useMemo, useState  } from "react";
+import React, { FC,useEffect, useMemo, useState  } from "react";
 import styles from './SingUpPage.module.scss';
 import Title from "../../components/Title";
 import TextInput from "../../components/Input";
-import classNames from "classnames";
+import classnames from "classnames";
 import Button from "../../components/Button";
 import { ButtonType } from "../../utils/@globalTypes";
 import { Theme, useThemeContext } from "../../components/context/Theme/Context";
 import { NavLink, useNavigate } from "react-router-dom";
 import { RoutesList } from "../Router";
-import { useDispatch } from "react-redux";
-import {  signUpUser } from "../../redux/reducers/authSlice";
 
-const SingUpPage= () => {
-    const { theme } = useThemeContext();
-    const isDark = theme === Theme.Dark;
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
+import { auth, db } from "../../firebase";
+import { useAuthValue } from "src/components/context/Auth/Context";
+import { addDoc, collection } from "firebase/firestore";
 
-    const [name, setName] = useState("");
-    const onChangeName = (value: string) => {
-      setName(value)
-    };
-
-    const [email, setEmail] = useState("");
-    const onChangeEmail = (value: string) => {
-      setEmail(value)
-    };
-    const [password, setPassword] = useState("");
-    const onChangePassword = (value: string) => {
-      setPassword(value);
-    };
-
-
-    const [confirmPassword, setConfirmPW] = useState("");
-    const onChangeConfirmPW = (value: string) => {
-      setConfirmPW(value);
-    };
-
-    const [nameError, setNameError] = useState("");
-    const [emailError, setEmailError] = useState("");
-    const [passwordError, setPasswordError] = useState("");
-
-    const onSignUpClick = () => {
-      dispatch(
-        signUpUser({
-          data: { username: name, email, password },
-          callback: () => navigate(RoutesList.SignIn),
-        })
-      );
-    };
-  
-    useEffect(() => {
-      if (name.length === 0) {
-        setNameError("Name is required field");
-      } else {
-        setNameError("");
-      }
-    }, [name]);
-  
-    useEffect(() => {
-      if (email.length === 0) {
-        setEmailError("Email is required field");
-      } else {
-        setEmailError("");
-      }
-    }, [email]);
-  
-    useEffect(() => {
-      if (password !== confirmPassword) {
-        setPasswordError("Passwords must match");
-      } else if (password.length === 0 || confirmPassword.length === 0) {
-        setPasswordError("Password is required field");
-      } else {
-        setPasswordError("");
-      }
-    }, [confirmPassword, password]);
-  
-    const isValid = useMemo(() => {
-      return (
-        nameError.length === 0 &&
-        emailError.length === 0 &&
-        passwordError.length === 0
-      );
-    }, [nameError,emailError,passwordError]);
-    
-    // Используем, если не надо показывать никаких ошибок пользователю
-  // const isValid = useMemo(() => {
-  //   return (
-  //     name.length > 0 &&
-  //     email.length > 0 &&
-  //     password.length > 0 &&
-  //     confirmPassword.length > 0 &&
-  //     password === confirmPassword
-  //   );
-  // }, [name, email, password, confirmPassword]);
-
-    return(
-    <div>
-      <div
-        className={classNames(styles.containerSingUp, {[styles.containerDark]: isDark,
-        })}
-      >
-        
-       <NavLink
-        to={RoutesList.Home}
-        className={classNames(styles.backBtnHome, {
-          [styles.backHomeDark]: isDark,
-        })}
-      >
-        Back to home
-      </NavLink>
-        
-        <div className={classNames(styles.titleSuccess)}>
-          <Title title={"Sign Up"} />
-        </div>
-         <div className={styles.wrapperSingUp}>
-            <div
-            className={classNames(styles.inputContainer, {
-              [styles.inputContainerDark]: isDark,})}>
-            
-            <TextInput
-              value={name}
-              onChange={onChangeName}
-              type={"text"}
-              title="Name"
-              placeholder="Your name" 
-              errorText={nameError}
-                />
-            <TextInput
-              value={email}
-              onChange={onChangeEmail}
-              type={"text"}
-              title="Email"
-              placeholder="Your email"
-              errorText={emailError}
-            />
-            <TextInput
-              value={password}
-              onChange={onChangePassword}
-              type={"password"}
-              title="Password"
-              placeholder="Your password"
-              errorText={passwordError}
-            />
-            <TextInput
-              value={confirmPassword}
-              onChange={onChangeConfirmPW}
-              type={"password"}
-              title="Confirm Password"
-              placeholder="Confirm Password"
-              errorText={passwordError}
-            />
-               <div className={styles.button}>
-               <Button
-              title={"Sign Up"}
-              disabled={!isValid}
-              onClick={onSignUpClick}
-              type={ButtonType.Primary}
-            />
-            </div>
-            <div
-              className={classNames(styles.singUp, {
-                [styles.darkSingUp]: isDark,})} >
-                  Already have an account?{" "}
-            <NavLink to={RoutesList.SignIn} className={styles.navButton}>
-              Sign In
-            </NavLink>
-            </div>
-            </div>
-         </div>
-      </div>
-     </div>
+const validateEmail = (email: string) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
 };
+
+type LabelProps = {
+  title: string;
+};
+
+const SingUpPage= () => {
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [emailTouched, setEmailTouched] = useState(false);
+
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordTouched, setPasswordTouched] = useState(false);
+
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
+
+  const [error, setError] = useState("");
+  // @ts-ignore
+  const { setTimeActive } = useAuthValue();
+
+  const validatePassword = () => {
+    let isValid = true;
+    if (password !== "" && confirmPassword !== "") {
+      if (password !== confirmPassword) {
+        isValid = false;
+        setError("Passwords does not match");
+      }
+    }
+    return isValid;
+  };
+
+  const register = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    setError("");
+    if (validatePassword()) {
+      const res = await createUserWithEmailAndPassword(auth, email, password)
+        .then(async (res) => {
+          const user = res.user;
+          console.log(user);
+          await addDoc(collection(db, "users"), {
+            uid: user.uid,
+            name,
+            authProvider: "local",
+            email,
+          });
+          // @ts-ignore
+          return sendEmailVerification(auth.currentUser)
+            .then(() => {
+              setTimeActive(true);
+              navigate("/verify-email");
+            })
+            .catch((err) => alert(err.message));
+        })
+        .catch((err) => setError(err.message));
+    }
+    setName("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+  };
+
+  useEffect(() => {
+    if (emailTouched && !validateEmail(email)) {
+      setEmailError("Set correct email");
+    } else {
+      setEmailError("");
+    }
+  }, [emailTouched, email]);
+
+  useEffect(() => {
+    if (passwordTouched && password.length < 8) {
+      setPasswordError("Enter more than 8 characters");
+    } else {
+      setPasswordError("");
+    }
+  }, [passwordTouched, password]);
+
+  useEffect(() => {
+    if (confirmPasswordTouched && confirmPassword.length < 8) {
+      setConfirmPasswordError(`Enter more than 8 characters`);
+    } else if (confirmPasswordTouched && password !== confirmPassword) {
+      setConfirmPasswordError(`Пароли не совпадают`);
+    } else {
+      setConfirmPasswordError(``);
+    }
+  }, [confirmPasswordTouched, confirmPassword, password]);
+
+  const onBlurEmail = () => {
+    setEmailTouched(true);
+  };
+
+  const onBlurPassword = () => {
+    setPasswordTouched(true);
+  };
+
+  const onBlurConfirmPassword = () => {
+    setConfirmPasswordTouched(true);
+  };
+
+  const Label: FC<LabelProps> = ({ title }) => {
+    return (
+      <div
+        className={classnames(styles.label, {
+          [styles.label__Dark]: theme === Theme.Dark,
+        })}
+      >
+        {title}
+      </div>
+    );
+  };
+
+  const { theme, onChangeTheme } = useThemeContext();
+  const isDarkTheme = theme === Theme.Dark;
+
+  return (
+    <div
+      className={classnames(styles.signUp, {
+        [styles.signUp__Dark]: isDarkTheme,
+      })}
+    >
+      <div
+        className={classnames(styles.signUp__container, {
+          [styles.signUn__container_Dark]: isDarkTheme,
+        })}
+      >
+        <div className={styles.titleWrap}>
+          <NavLink
+            to={RoutesList.Home}
+            className={classnames(styles.titleWrap__backToHomeText, {
+              [styles.titleWrap__backToHomeTextDark]: isDarkTheme,
+            })}
+          >
+            Back to home
+          </NavLink>
+          <Title title={"Sign Up"}></Title>
+        </div>
+
+        <form
+          className={classnames(styles.formContainer, {
+            [styles.formContainer__Dark]: isDarkTheme,
+          })}
+          onSubmit={register}
+          name="registration_form"
+        >
+          <div className={styles.formContainer__inputContainer}>
+            <Label title={"Name"} />
+            <TextInput
+              value={name}
+              onChange={setName}
+              placeholder={"Your name"}
+              className={classnames(
+                styles.formContainer__inputContainer__nameInput,
+                {
+                  [styles.formContainer__inputContainer__nameInput__Dark]:
+                    isDarkTheme,
+                }
+              )}
+            />
+          </div>
+
+          <div className={styles.formContainer__inputContainer}>
+            <Label title={"Email"} />
+            <TextInput
+              value={email}
+              onChange={setEmail}
+              placeholder={"Your email"}
+              className={classnames(
+                styles.formContainer__inputContainer__emailInput,
+                {
+                  [styles.formContainer__inputContainer__emailInput__Dark]:
+                    isDarkTheme,
+                }
+              )}
+              onBlur={onBlurEmail}
+              error={!!emailError}
+            />
+            {emailTouched && emailError && (
+              <div
+                className={classnames({
+                  [styles.error__Dark]: isDarkTheme,
+                })}
+              >
+                {emailError}
+              </div>
+            )}
+          </div>
+
+          <div className={styles.formContainer__inputContainer}>
+            <Label title={"Password"} />
+            <TextInput
+              type="password"
+              value={password}
+              onChange={setPassword}
+              placeholder={"Your password"}
+              className={classnames(
+                styles.formContainer__inputContainer__passwordInput,
+                {
+                  [styles.formContainer__inputContainer__passwordInput__Dark]:
+                    isDarkTheme,
+                }
+              )}
+              onBlur={onBlurPassword}
+              error={!!passwordError}
+            />
+            {passwordTouched && passwordError && (
+              <div
+                className={classnames({
+                  [styles.error__Dark]: isDarkTheme,
+                })}
+              >
+                {passwordError}
+              </div>
+            )}
+          </div>
+
+          <div className={styles.formContainer__inputContainer}>
+            <Label title={"Confirm Password"} />
+            <TextInput
+              type="password"
+              value={confirmPassword}
+              onChange={setConfirmPassword}
+              placeholder={"Confirm password"}
+              className={classnames(
+                styles.formContainer__inputContainer__confirmPasswordInput,
+                {
+                  [styles.formContainer__inputContainer__confirmPasswordInput__Dark]:
+                    isDarkTheme,
+                }
+              )}
+              onBlur={onBlurConfirmPassword}
+              error={!!confirmPasswordError}
+            />
+            {confirmPasswordTouched && confirmPasswordError && (
+              <div
+                className={classnames({
+                  [styles.error__Dark]: isDarkTheme,
+                })}
+              >
+                {confirmPasswordError}
+              </div>
+            )}
+          </div>
+
+          <div className={styles.buttonAndText}>
+            <Button
+              type={ButtonType.Primary}
+              title={"Sign Up"}
+              className={styles.buttonAndText__signUpButton}
+              disabled={false}
+              onClick={register}
+            />
+
+            <div
+              className={classnames(styles.buttonAndText__formFooterText, {
+                [styles.buttonAndText__formFooterText__Dark]: isDarkTheme,
+              })}
+            >
+              Already have an account?{" "}
+              <NavLink
+                to={RoutesList.SignIn}
+                className={classnames(
+                  styles.buttonAndText__formFooterText__SignUp,
+                  {
+                    [styles.buttonAndText__formFooterText__SignUp__Dark]:
+                      isDarkTheme,
+                  }
+                )}
+              >
+                {" "}
+                Sign In
+              </NavLink>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+
 
 export default SingUpPage;
