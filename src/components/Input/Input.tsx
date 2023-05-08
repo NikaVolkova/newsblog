@@ -10,13 +10,14 @@ type InputProps={
     title?: string;
     placeholder:string;
     disabled?:boolean;
-    errorText?:string;
+    error?: boolean;
     type?: string;
-    inputClassName?: string;
+    className?: string;
+    onBlur?: () => void;
 }
 const TextInput:FC<InputProps>=({value,onChange,type,
-  title,placeholder,disabled,errorText,inputClassName,
-  onKeyDown,})=>{
+  title,placeholder,disabled,error,className,
+  onKeyDown,onBlur})=>{
 
 
 const onChangeText = (e: React.ChangeEvent<HTMLInputElement>)=>{
@@ -27,9 +28,9 @@ const onChangeText = (e: React.ChangeEvent<HTMLInputElement>)=>{
          {title && <div className={styles.title}>{title}</div>}
         <input
         value={value}
-        className={classNames(styles.input,inputClassName,{
+        className={classNames(styles.input,className,{
             [styles.disabled]:disabled,
-            [styles.valid]:errorText,}
+            [styles.valid]:error,}
             )
 }
         placeholder={placeholder}
@@ -37,8 +38,9 @@ const onChangeText = (e: React.ChangeEvent<HTMLInputElement>)=>{
         onChange={onChangeText}
         disabled={disabled}
         type={type}
+        onBlur={onBlur}
         />
-        {errorText &&<div className={styles.validText}>{errorText}</div>}
+        {error &&<div className={styles.validText}>{error}</div>}
       </div>  
     );
     };

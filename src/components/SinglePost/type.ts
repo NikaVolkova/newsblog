@@ -3,7 +3,7 @@ export type PostType = {
     imageUrl: string | null;
     summary: string;
     title: string;
-    text: string;
+    text: string| null;
   };
   
   export type PostProps = {

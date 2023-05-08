@@ -1,95 +1,141 @@
 @import "./src/assets/colors";
 
-.container {
-  background-color: $light;
+* {
+  box-sizing: border-box;
 }
-.containerDark{
-  background-color: $secondary;
+.signIn {
+  background-color: #fff;
+  &__Dark {
+    background-color: #313037;
+  }
+  &__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+    width: 1120px;
+    margin: 0 auto;
+    &__Dark {
+      background-color: #313037;
+    }
+  }
 }
-.backBtnHome {
+
+.titleWrap {
   margin-top: 72px;
-  margin-left: 40px;
-  font-weight: 400;
+  margin-right: auto;
+
+  &__signUpText {
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 80px;
+    color: #313037;
+  }
+  &__backToHomeText {
+    color: black;
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    &:hover {
+      cursor: pointer;
+      color: blue;
+    }
+  }
+  &__backToHomeTextDark {
+    text-decoration: none;
+    color: #fff;
+  }
+}
+
+.formContainer {
+  box-shadow: 0px 12px 40px 9px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  margin-top: 72px;
+  margin-bottom: 152px;
+  padding: 40px;
+  width: 624px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  border-radius: 16px;
+  &__inputContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    &__emailInput {
+      width: 100%;
+      border-radius: 4px;
+      &__Dark {
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: rgba(255, 255, 255, 0.5) !important;
+        border-radius: 4px !important;
+      }
+    }
+    &__passwordInput {
+      width: 100%;
+      border-radius: 4px;
+      &__Dark {
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: rgba(255, 255, 255, 0.5) !important;
+        border-radius: 4px;
+      }
+    }
+    &__forgotPass {
+      margin-top: 16px;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      &__Dark {
+        color: #fff;
+      }
+    }
+  }
+  &__Dark {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: none;
+  }
+}
+
+.label {
+  font-weight: 600;
   font-size: 16px;
-  line-height: 24px;
-  color: $secondary;
-  margin-bottom: 32px;
-  &:hover{
-    cursor: pointer;
-        color: $primary;
- }
+  line-height: 20px;
+  color: #313037;
+  &__Dark {
+    color: #fff;
+  }
 }
-.backBtnHomeDark{
-  margin-left: 40px;
-  color: $white;
-  &:hover{
-    cursor: pointer;
-        color: $primary;
- }
-
-}
-
-.wrapperPage {
+.buttonAndText {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  
-}
-.inputContainer {
-  border: 1px solid $medium;
-  padding: 40px;
-  margin-bottom: 40px;
-}
-.inputContainerDark{
-  border-color: $gray;
-}
-.title {
-  margin-left: 40px;
-  text-align: start;
-  margin-bottom: 72px;
-}
-.forgotPassword {
-  
-  font-size: 16px;
-  line-height: 20px;
-  color: $secondary;
-  font-weight: 400;
-  &:hover{
-    cursor: pointer;
-        color: $primary;
- }
-}
-.darkThemeForgotPassword{
-  color: $white;
-}
-.button {
-  text-align: center;
-  margin-top: 48px;
-  width: 544px;
-}
-.singUp {
- 
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 20px;
-  color: $gray;
-  display: flex;
-  justify-content: center;
-  margin-top: 24px;
-  
-  & span {
-    margin-left: 10px;
-    color: $primary;
-    &:hover{
-      cursor: pointer;
-          color: $primary;}
+  &__signUpButton {
+    margin-top: 8px;
+    width: 544px !important;
+    margin-bottom: 24px;
+  }
+  &__formFooterText {
+    text-align: center;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    color: #8d8e97;
+    &__Dark {
+      color: #fff;
+    }
+    &__SignIn {
+      text-decoration: none;
+      color: #2231aa;
+      &__Dark {
+        text-decoration: none;
+        color: #5360cd;
+      }
+    }
   }
 }
-.darkSingUp{
-  margin-left: 10px;
-  color:$medium;
-  & span {
-    color: $primary-secondary;
-  }
+.error__Dark {
+  color: #fff;
 }

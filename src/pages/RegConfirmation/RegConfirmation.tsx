@@ -7,26 +7,17 @@ import { ButtonType } from "../../utils/@globalTypes";
 import { Theme, useThemeContext } from "../../components/context/Theme/Context";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { RoutesList } from "../Router";
-import { useDispatch } from "react-redux";
-import { activateUser } from "../../redux/reducers/authSlice";
+import { useDispatch,useSelector } from "react-redux";
+
 
 const RegConfirmation = () => {
     const { theme } = useThemeContext();
     const isDark = theme === Theme.Dark;
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { uid, token } = useParams();
+ 
     
-  const onConfirmButtonClick = () => {
-    if (uid && token) {
-      dispatch(
-        activateUser({
-          data: { uid, token },
-          callback: () => navigate(RoutesList.Success),
-        })
-      );
-    }
-  };
+  
     return (
         <div>
           <div
@@ -58,12 +49,16 @@ const RegConfirmation = () => {
                 <div className={styles.textComment}>{" "}
             Please activate your account with the activation link in the email.
             Please, check your email</div>
-               
+            <NavLink
+              to={RoutesList.Home}
+              className={styles.backHome}
+            >
                 <div className={styles.button}>
                   <Button
-                    title={"Confirm"} onClick={onConfirmButtonClick} type={ButtonType.Primary}
+                    title={"Confirm"}  className={styles.button}  type={ButtonType.Primary}
                   />
                 </div>
+                </NavLink> 
               </div>
             </div>
           </div>

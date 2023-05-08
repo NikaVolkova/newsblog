@@ -1,42 +1,30 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { RootState } from "../store";
-import { SignUpUserPayload, ActivateUserPayload,SignInUserPayload } from "./@types";
-import { UserInfoResponse } from "../sagas/@types";
-import { ACCESS_TOKEN_KEY } from "src/utils/constants";
+import {
+  AuthUserPayload,
+  setUserPayload,
+  UserActionPayload,
+} from "src/utils";
 
-
-
-
-const initialState: any = {
-  isLoggedIn: !!localStorage.getItem(ACCESS_TOKEN_KEY),
-  userInfo: null
+type AuthStateType = {
+  user: UserActionPayload | null;
 };
 
-const authSlice = createSlice({
+const INITIAL_STATE: AuthStateType = {
+  user: null,
+};
+
+const authReducer = createSlice({
   name: "auth",
-  initialState,
+  initialState: INITIAL_STATE,
   reducers: {
-    signUpUser: (_, __: PayloadAction<SignUpUserPayload>) => {},
-    activateUser: (_, __: PayloadAction<ActivateUserPayload>) => {},
-    signInUser: (_, __: PayloadAction<SignInUserPayload>) => {},
-    setLoggedIn: (state, action: PayloadAction<boolean>) => {
-      state.isLoggedIn = action.payload;
-    },
-    logoutUser: (_, __: PayloadAction<undefined>) => {},
-    getUserInfo: (_, __: PayloadAction<undefined>) => {},
-    setUserInfo: (state, action: PayloadAction<UserInfoResponse | null>) => {
-      state.userInfo = action.payload;
+    User: (state, action: PayloadAction<any>) => {
+      state.user = action.payload;
     },
   },
 });
 
-export const { signUpUser, activateUser, signInUser, setLoggedIn, logoutUser,
-  setUserInfo, getUserInfo } = authSlice.actions;
+export default authReducer.reducer;
 
-export default authSlice.reducer;
-
-export const AuthSelectors = {
-  getLoggedIn: (state: RootState) => state.auth.isLoggedIn,
-  getUserInfo: (state: RootState) => state.auth.userInfo,
-};
+export const { User } = authReducer.actions;

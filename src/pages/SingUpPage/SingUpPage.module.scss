@@ -1,88 +1,157 @@
 @import "./src/assets/colors";
+* {
+  box-sizing: border-box;
+}
 
-.containerSingUp {
-  background-color: $light;
+.signUp {
+  position: relative;
+  background-color: #fff;
+  &__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+    width: 1120px;
+    margin: 0 auto;
+    &__dark {
+      background-color: #313037;
+    }
+  }
+  &__Dark {
+    background-color: #313037;
+  }
 }
-.containerDark{
-  background-color: $secondary;
-}
-.backBtnHome {
+
+.titleWrap {
   margin-top: 72px;
-  margin-left: 40px;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  color: $secondary;
-  margin-bottom: 32px;
-  &:hover{
-    cursor: pointer;
-        color: $primary;
- }
-}
-.backBtnHomeDark{
-  margin-left: 40px;
-  color: $white;
-  &:hover{
-    cursor: pointer;
-        color: $primary;
- }
+  margin-right: auto;
 
+  &__signUpText {
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 80px;
+    color: #313037;
+  }
+  &__backToHomeText {
+    text-decoration: none;
+    color: black;
+  }
+  &__backToHomeTextDark {
+    color: #fff;
+  }
 }
-.wrapperSingUp {
+
+.formContainer {
+  box-shadow: 0px 12px 40px 9px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  margin-top: 72px;
+  margin-bottom: 152px;
+  padding: 40px;
+  width: 624px;
+  display: flex;
+  flex-direction: column;
+  // gap: 40px;
+  border-radius: 16px;
+  &__inputContainer {
+    display: flex;
+    flex-direction: column;
+    // gap: 8px;
+    margin-top: 25px;
+    &__nameInput {
+      width: 100%;
+      border-radius: 4px;
+      margin-top: 15px;
+      &__Dark {
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.5);
+        border-radius: 4px;
+      }
+    }
+    &__emailInput {
+      width: 100%;
+      border-radius: 4px;
+      margin-top: 15px;
+      &__Dark {
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.5);
+        border-radius: 4px;
+      }
+    }
+    &__passwordInput {
+      width: 100%;
+      border-radius: 4px;
+      margin-top: 15px;
+      &__Dark {
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.5);
+        border-radius: 4px;
+      }
+    }
+    &__confirmPasswordInput {
+      width: 100%;
+      border-radius: 4px;
+      margin-top: 15px;
+      &__Dark {
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.5);
+        border-radius: 4px;
+      }
+    }
+    &__forgotPass {
+      margin-top: 16px;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 20px;
+      &__Dark {
+        color: #fff;
+      }
+    }
+  }
+  &__Dark {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: none;
+  }
+}
+.label {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: #313037;
+  &__Dark {
+    color: #fff;
+  }
+}
+.buttonAndText {
+  margin-top: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-}
-.inputContainer {
-  border: 1px solid $medium;
-  padding: 40px;
-  margin-bottom: 40px;
- 
-}
-.inputContainerDark{
-  border-color: $gray;
-}
-.title {
-  margin-left: 40px;
-  text-align: start;
-  margin-bottom: 72px;
-}
-.TextInput.placeholder{
-  margin-left: 15px;
-}
-.button {
-  text-align: center;
-  margin-top: 48px;
-  width: 544px;
-}
-.singUp {
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 20px;
-  color: $gray;
-  display: flex;
-  justify-content: center;
-  margin-top: 24px;
-  & span {
-    margin-left: 10px;
-    color: $primary;
-    &:hover{
-      cursor: pointer;
-          color: $primary;}
+  &__signUpButton {
+    margin-top: 8px;
+    width: 100%;
+    margin-bottom: 24px;
+  }
+  &__formFooterText {
+    text-align: center;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    color: #8d8e97;
+    &__Dark {
+      color: #fff;
+    }
+    &__SignUp {
+      text-decoration: none;
+      color: #2231aa;
+      &__Dark {
+        text-decoration: none;
+        color: #5360cd;
+      }
+    }
   }
 }
-.darkSingUp{
-  margin-left: 10px;
-  color:$medium;
-  & span {
-    color: $primary-secondary;
-  }
+.error__Dark {
+  color: #fff;
 }
-.navButton {
-  text-decoration: none;
-  color: $primary;
-  margin-left: 4px;
-  &:hover {
-    text-decoration: underline;
-  }}

@@ -1,19 +1,27 @@
-import React,{FC, ReactNode} from "react";
+import React,{FC, ReactNode, useEffect, useState } from "react";
+import classNames from "classnames";
 import  styles from "./UserName.module.scss";
+import { Theme, useThemeContext } from "src/components/context/Theme/Context";
+import { UserIcon} from "src/assets/icons";
 import {UserInfoResponse} from "../../redux/sagas/@types";
 
+
 export type UserNameProps={
-    userName:string;
+    username:string;
 };
-const UserBox:FC<UserNameProps> = ({userName })=>{
-    
+const User:FC<UserNameProps> = ({username })=>{
+  const { theme } = useThemeContext();
+  const caps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const res = username.split("").filter(function (l: any) {
+    return ~caps.indexOf(l);
+  });
     return(    
     <div className={styles.userSpane}>
         <div className={styles.userInitials}>
-          {userName.split(" ").map((elem: string) => elem[0]).join('')}
+        {res.length !== 0 ? res : <UserIcon />}
         </div>
-        <div className={styles.userName}>{userName}</div>
+        <div className={styles.userName}>{username}</div>
       </div>
   );
 };
-export default UserBox;
+export default User;

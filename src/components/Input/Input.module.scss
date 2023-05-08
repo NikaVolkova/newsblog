@@ -18,10 +18,11 @@
 }
 .input{
     margin-left:15px;
-    width:1036px;
+    margin-right: 15px;
+    width:1000px;
     height: 56px;
     top: 28px;
-    background: $gray;
+    background: $primary-secondary;
     box-sizing: border-box;
     border: 2px solid transparent;
     &:hover{

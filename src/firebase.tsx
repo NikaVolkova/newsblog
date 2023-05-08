@@ -1,17 +1,24 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyCcsHry0Sgkpu4fYGRz59ZysouX0Agc2Ng",
-  authDomain: "mydiplomapp-e5ebf.firebaseapp.com",
-  projectId: "mydiplomapp-e5ebf",
-  storageBucket: "mydiplomapp-e5ebf.appspot.com",
-  messagingSenderId: "1071633339957",
-  appId: "1:1071633339957:web:3dea3199defe1904ef437c",
+  apiKey: "AIzaSyBU9eAhuoyfS83kH0SXAcKyyRdXSB2rLas",
+  authDomain: "newsblog-da291.firebaseapp.com",
+  projectId: "newsblog-da291",
+  storageBucket: "newsblog-da291.appspot.com",
+  messagingSenderId: "307188015617",
+  appId: "1:307188015617:web:84f86e6d9a1f864c289600",
+  measurementId: "G-N85SXCQEEL",
 };
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
+const analytics = getAnalytics(app);
 export { auth, db };
