@@ -24,23 +24,24 @@
 .darkContainer {
   background-color: $secondary;
 }
-.switcher{
-  width: 65px;
-  display: flex;
-  justify-content:flex-end;
-  align-items: end;
-  flex-direction:row;
-  gap: 22px;
-  
-}
+
 .footer {
   padding: 33px 0;
   display: flex;
   justify-content: space-between;
   border-top: 1px solid $gray;
-  div {
+  .blogolog {
     justify-content: space-between;
-    width: 626px;
+    width: 1040px;
+    color: $gray;
+  }
+  .switcher{
+    width: 65px;
+    display: flex;
+    justify-content:flex-end;
+    align-items: end;
+    flex-direction:row;
+    gap: 22px;
     color: $gray;
   }
 }

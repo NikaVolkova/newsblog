@@ -14,7 +14,7 @@ import {
   sendEmailVerification,
 } from "firebase/auth";
 import { auth } from "../../firebase";
-import { useAuthValue } from "src/components/context/Auth/Context";
+import { useAuthValue} from "src/components/context/Auth/Context";
 
 type LabelProps = {
   title: string;
@@ -50,7 +50,7 @@ const SingInPage= () => {
           // @ts-ignore
           sendEmailVerification(auth.currentUser)
             .then(() => {
-              setTimeActive(true);
+              
               navigate("/verify-email");
             })
             .catch((err) => alert(err.message));
@@ -223,7 +223,6 @@ const SingInPage= () => {
         </form>
       </div>
     </div>
-  );
-};
+  );};
 
 export default SingInPage;

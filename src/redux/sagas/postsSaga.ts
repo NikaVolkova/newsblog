@@ -26,7 +26,7 @@ import {
 } from "../reducers/postSlice";
 import { AllPostsResponse } from "./@types";
 import { CardListType, CardPostType } from "../../utils/@globalTypes";
-import callCheckingAuth from "src/redux/sagas/callCheckingAuth";
+
 
 function* getPostsWorker(action: PayloadAction<GetPostsPayload>) {
   yield put(setPostsLoading(true));

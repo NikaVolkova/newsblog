@@ -43,6 +43,7 @@ const Header: FC<HeaderProps> = ({ onClick, openInput }) => {
     // @ts-ignore
     const { currentUser } = useAuthValue();
      const [user] = useAuthState(auth);
+ 
     const [name, setName] = useState("");
   
     const fetchUserName = async () => {
@@ -58,7 +59,7 @@ const Header: FC<HeaderProps> = ({ onClick, openInput }) => {
       }
     };
     useEffect(() => {
-      if (!user) return navigate("/");
+      if (!user) return ;
       fetchUserName();
     }, [user]);
 

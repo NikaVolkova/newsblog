@@ -1,6 +1,5 @@
 
-export {DislikeIcon} from  './DislikeIcon';
-export {LikeIcon} from './LikeIcon';
+
 export {MoreIcon} from  './MoreIcon';
 export {BookmarkIcon} from './BookmarkIcon';
 export {AddBookmarkIcon} from './AddBookmarkIcon';

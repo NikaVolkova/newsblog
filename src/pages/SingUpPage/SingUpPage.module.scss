@@ -146,11 +146,15 @@
       text-decoration: none;
       color: #2231aa;
       &__Dark {
-        text-decoration: none;
+        text-decoration:none;
         color: #5360cd;
       }
     }
   }
+}
+.buttonAndText__signUpButton{
+  text-align: center;
+  text-decoration: $light;
 }
 .error__Dark {
   color: #fff;

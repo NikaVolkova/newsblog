@@ -1,61 +1,63 @@
 import styles from "./Verification.module.scss";
 
-import { useAuthValue } from "src/components/context/Auth/Context";
-import { useState, useEffect, useContext } from "react";
+import { useAuthValue} from "src/components/context/Auth/Context";
+import {useState, useEffect, useContext } from "react";
 import { auth } from "../../firebase";
 import { sendEmailVerification } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import Button from "../Button";
 import { ButtonType } from "src/utils";
 
-const Verificatoin = () => {
-    // @ts-ignore
-  const {currentUser } = useAuthValue();
-  const [time, setTime] = useState(60);
-  // @ts-ignore
-  const { timeActive, setTimeActive } = useAuthValue();
-  const navigate = useNavigate();
+const Verification = () => {
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      currentUser
-        ?.reload()
+    // @ts-ignore
+    const { currentUser } = useAuthValue();
+    const [time, setTime] = useState(60);
+    // @ts-ignore
+    const { timeActive, setTimeActive } = useAuthValue();
+    const navigate = useNavigate();
+  
+    useEffect(() => {
+      const interval = setInterval(() => {
+        currentUser
+          ?.reload()
+          .then(() => {
+            if (currentUser?.emailVerified) {
+              clearInterval(interval);
+              navigate("/profile");
+            }
+          })
+          .catch((err: { message: any }) => {
+            alert(err.message);
+          });
+      }, 500);
+    }, [navigate, currentUser]);
+  
+    useEffect(() => {
+      let interval: any = null;
+      if (timeActive && time !== 0) {
+        interval = setInterval(() => {
+          setTime((time) => time - 1);
+        }, 1000);
+      } else if (time === 0) {
+        setTimeActive();
+        setTime(60);
+        clearInterval(interval);
+      }
+      return () => clearInterval(interval);
+    }, [timeActive, time, setTimeActive]);
+  
+    const resendEmailVerification = () => {
+      // @ts-ignore
+      sendEmailVerification(auth.currentUser)
         .then(() => {
-          if (currentUser?.emailVerified) {
-            clearInterval(interval);
-            navigate("/profile");
-          }
+          setTimeActive();
         })
-        .catch((err: { message: any }) => {
+        .catch((err) => {
           alert(err.message);
         });
-    }, 500);
-  }, [navigate, currentUser]);
-
-  useEffect(() => {
-    let interval: any = null;
-    if (timeActive && time !== 0) {
-      interval = setInterval(() => {
-        setTime((time) => time - 1);
-      }, 1000);
-    } else if (time === 0) {
-      setTimeActive(false);
-      setTime(60);
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [timeActive, time, setTimeActive]);
-
-  const resendEmailVerification = () => {
-    // @ts-ignore
-    sendEmailVerification(auth.currentUser)
-      .then(() => {
-        setTimeActive(true);
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
-  };
+    };
+  
 
   return (
     <div className={styles.center}>
@@ -78,4 +80,4 @@ const Verificatoin = () => {
   );
 };
 
-export default Verificatoin;
+export default Verification;

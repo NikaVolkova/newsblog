@@ -1,4 +1,5 @@
 import { RootState } from "./store";
+
 export default {
     getCardsList: (state: RootState) => state.posts.cardsList,
     getPostsLoading: (state: RootState) => state.posts.isPostsLoading,

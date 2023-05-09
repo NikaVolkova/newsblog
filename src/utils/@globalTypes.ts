@@ -76,6 +76,5 @@ export type FilterBtnNameArray = {
 export type FilterBtnProps = {
   buttonGroup: FilterBtnNameArray[];
   onClick: (id: ButtonSort) => void;
-  activeBtn?: ButtonSort;
-  
+  activeBtn?: ButtonSort; 
 };
