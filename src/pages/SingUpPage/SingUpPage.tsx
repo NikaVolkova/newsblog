@@ -47,7 +47,7 @@ const SingUpPage= () => {
 
   const [error, setError] = useState("");
   // @ts-ignore
-  const { setTimeActive } = useAuthValue();
+  const { setTimeActive} = useAuthValue ();
 
   const validatePassword = () => {
     let isValid = true;
@@ -77,7 +77,7 @@ const SingUpPage= () => {
           // @ts-ignore
           return sendEmailVerification(auth.currentUser)
             .then(() => {
-              setTimeActive(true);
+              
               navigate("/verify-email");
             })
             .catch((err) => alert(err.message));

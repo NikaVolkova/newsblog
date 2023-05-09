@@ -1,7 +1,11 @@
+import { ReactElement, ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuthValue } from "src/components/context/Auth/Context";
 
-export default function PrivateRoute({ children }: any) {
+interface PrivateRouteProps {
+  children: ReactNode;
+}
+export default function PrivateRoute({ children }: PrivateRouteProps) {
   // @ts-ignore
   const { currentUser } = useAuthValue();
 
@@ -9,5 +13,5 @@ export default function PrivateRoute({ children }: any) {
     return <Navigate to="/sign-in" replace />;
   }
 
-  return children;
+  return <>{children}</>;
 }

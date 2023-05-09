@@ -26,7 +26,7 @@ const PagesContainer = () => {
            <div className={styles.mainInfo}>
         <Outlet />
         <div className={styles.footer}>
-          <div>©2023 Blogolog</div>
+          <div className={styles.blogolog}>©2023 Blogolog</div>
           <div className={styles.switcher}>Dark Theme<ThemeSwitcher /></div>
           
         </div>

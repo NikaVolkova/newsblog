@@ -28,7 +28,7 @@ export enum RoutesList {
   UserPage = "/profile",
   SignIn = "/sign-in",
   SignUp = "/sign-up",
-  Confirm = "/activate/:uid/:token",
+  
   Success = "/sign-up/success",
   Default = "*",
   NewPass ="/new-password",

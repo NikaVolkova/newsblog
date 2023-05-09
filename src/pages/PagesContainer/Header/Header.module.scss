@@ -11,6 +11,9 @@
   top: 0;
   width: 100%;
 }
+.darkContainer {
+  background-color: $secondary;
+}
 .infoContainer {
   display: flex;
   gap:8px;

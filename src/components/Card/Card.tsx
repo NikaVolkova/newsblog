@@ -39,34 +39,34 @@ const Card: FC<CardPostProps> = ({ post }) => {
 
   return (
     <div
-      className={classNames(styles.cardWrap, {
-        [styles.cardWrap_Dark]: isDarkTheme,
+      className={classNames(styles.Wrap, {
+        [styles.Wrap_Dark]: isDarkTheme,
       })}
     >
-      <div className={styles.cardWrap_imgWrap}>
+      <div className={styles.Wrap_imgWrap}>
         <img
-          className={styles.cardWrap_imgWrap_img}
+          className={styles.Wrap_imgWrap_img}
           onClick={onClickMore}
           src={imageUrl}
           alt="#"
         />
       </div>
       <div
-        className={classNames(styles.cardWrap_textWrap, {
-          [styles.cardWrap_textWrap_Dark]: isDarkTheme,
+        className={classNames(styles.Wrap_textWrap, {
+          [styles.Wrap_textWrap_Dark]: isDarkTheme,
         })}
         onClick={onNavigateToPost}
       >
         <div
-          className={classNames(styles.cardWrap_textWrap_dateText, {
-            [styles.cardWrap_textWrap_dateText_Dark]: isDarkTheme,
+          className={classNames(styles.Wrap_textWrap_dateText, {
+            [styles.Wrap_textWrap_dateText_Dark]: isDarkTheme,
           })}
         >
           {convertDate(updatedAt)}
         </div>
         <div
-          className={classNames(styles.cardWrap_textWrap_titleText, {
-            [styles.cardWrap_textWrap_titleText_Dark]: isDarkTheme,
+          className={classNames(styles.Wrap_textWrap_titleText, {
+            [styles.Wrap_textWrap_titleText_Dark]: isDarkTheme,
           })}
           onClick={onNavigateToPost}
         >

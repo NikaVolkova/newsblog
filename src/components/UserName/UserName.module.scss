@@ -1,17 +1,18 @@
 @import "/src/assets/colors.scss";
 
 .userSpane{
-    width: 236px;
-    max-height: 84px;
-    padding: 8px;
-    background: #912EF2 103.13%;
-    box-sizing: content-box;
-    display: inline-flex;
     flex-direction: row;    
     align-items: center;
     text-align: center;
     font-family: 'Inter';
     font-style: normal;
+    width: 236px;
+    max-height: 54px;
+    padding: 8px;
+    background: #912EF2 103.13%;
+    box-sizing: content-box;
+    display: inline-flex;
+   border-radius: 10px;
     font-weight: 600;
     width: fit-content;
     font-size: 16px;
@@ -26,6 +27,7 @@
         width: 48px;
         height: 48px;
         color: $white;
+        
         background: #912EF2 103.13%;
         display: flex;
         flex-wrap: nowrap;
@@ -37,6 +39,10 @@
             cursor: pointer;
             }
             
+    }
+    .simbole{
+        height: 24px;
+        color: $white;
     }
     .userName{ 
         width: 104px;

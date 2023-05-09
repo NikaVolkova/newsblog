@@ -71,7 +71,7 @@ const SinglePostList: FC<PostProps> = ({ post }) => {
         <div className={styles.Post_container_buttonsWrap}>
           <div className={styles.Post_container_buttonsWrap_rightSide}>
             <div
-              className={classNames(styles.twiterIc, {
+              className={classNames(styles.Post_container_buttonsWrap_buttons, {
                 [styles.Post_container_buttonsWrap_buttons_Dark]: isDarkTheme,
               })}
             >

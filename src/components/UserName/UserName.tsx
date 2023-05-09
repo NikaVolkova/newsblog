@@ -20,6 +20,7 @@ const User:FC<UserNameProps> = ({username })=>{
         <div className={styles.userInitials}>
         {res.length !== 0 ? res : <UserIcon />}
         </div>
+       <div className={styles.simbole}>|</div> 
         <div className={styles.userName}>{username}</div>
       </div>
   );

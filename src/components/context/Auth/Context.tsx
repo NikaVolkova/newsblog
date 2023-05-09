@@ -5,9 +5,9 @@ const DEFAULT_VALUE = {};
 const AuthContext = createContext(DEFAULT_VALUE);
 
 
-type ThemeProviderProps = {
+ type ThemeProviderProps = {
   children: ReactNode;
-  value: any;
+  value:any;
 };
 
 const AuthProvider: FC<ThemeProviderProps> = ({ children, value }) => {
